@@ -8,6 +8,7 @@ import {
   conflictHandler,
   genericServerErrorHandler,
 } from "./errorHandlers";
+import authorsRouter from "./services/authors";
 
 const app = express(); //our server function initialized with express()
 
@@ -16,6 +17,8 @@ app.use(cors());
 app.use(express.json()); // this will enable reading of the bodies of requests, THIS HAS TO BE BEFORE server.use("/authors", authorsRouter)
 
 // ========== ROUTES =======================
+app.use("authors", authorsRouter);
+
 // ============== ERROR HANDLING ==============
 
 app.use(badRequestHandler);
