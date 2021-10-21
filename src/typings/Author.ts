@@ -21,10 +21,21 @@ export interface AuthorModelType extends Model<AuthorDocument> {
   ): Promise<AuthorDocument | null>;
 }
 
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       author: AuthorModel;
-//     }
-//   }
-// }
+//=============== Decoded token typing
+export interface DecodedToken {
+  _id: string;
+}
+
+//=============== declare global req
+interface Path {
+  path: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      author: AuthorDocument;
+      file?: Path;
+    }
+  }
+}

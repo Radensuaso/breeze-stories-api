@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json()); // this will enable reading of the bodies of requests, THIS HAS TO BE BEFORE server.use("/authors", authorsRouter)
 
 // ========== ROUTES =======================
-app.use("authors", authorsRouter);
+app.use("/authors", authorsRouter);
 
 // ============== ERROR HANDLING ==============
 
