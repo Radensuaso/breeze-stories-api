@@ -9,13 +9,14 @@ export interface Author {
   avatar: string;
   birthDate: Date;
   refreshToken: string;
+  googleId: string;
 }
 
 export interface AuthorDocument extends Document, Author {}
 
 export interface AuthorModelType extends Model<AuthorDocument> {
   checkCredentials(
-    email: string,
+    username: string,
     password: string
   ): Promise<AuthorDocument | null>;
 }
