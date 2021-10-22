@@ -1,6 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage, Options } from "multer-storage-cloudinary";
 
+//================= Cloudinary config
+
 process.env.TS_NODE_DEV && require("dotenv").config();
 if (!process.env.CLOUD_NAME) {
   throw new Error("No Cloudinary name.");

@@ -6,6 +6,7 @@ import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
+import q2m from "query-to-mongo";
 
 const authorsRouter = express.Router();
 
