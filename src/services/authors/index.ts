@@ -1,10 +1,10 @@
 import express from "express";
 import AuthorModel from "./model";
-import { saveAvatarCloudinary } from "src/lib/cloudinaryTools";
+import { saveAvatarCloudinary } from "../../lib/cloudinaryTools";
 import multer from "multer";
-import { tokenMiddleware } from "src/auth/tokenMiddleware";
+import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import createHttpError from "http-errors";
-import { generateJWTToken } from "src/auth/tokenTools";
+import { generateJWTToken } from "../../auth/tokenTools";
 
 const authorsRouter = express.Router();
 
@@ -46,28 +46,30 @@ authorsRouter.post("/login", async (req, res, next) => {
   }
 });
 
-// //==================== Post an avatar to an author.
-// authorsRouter.post(
-//   "/avatar",
-//   tokenMiddleware,
-//   multer({ storage: saveAvatarCloudinary }).single("avatar"),
-//   async (req, res, next) => {
-//     try {
-//       const authorId = req.author._id;
-//       const avatarUrl = req.file?.path;
+//==================== Post an avatar to an author.
+authorsRouter.post(
+  "/avatar",
+  tokenMiddleware,
+  multer({ storage: saveAvatarCloudinary }).single("avatar"),
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      console.log(authorId);
 
-//       const updatedAuthor = await AuthorModel.findByIdAndUpdate(
-//         authorId,
-//         {
-//           avatar: avatarUrl,
-//         },
-//         { new: true }
-//       );
-//       res.send(updatedAuthor);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
+      const avatarUrl = req.file?.path;
+
+      const updatedAuthor = await AuthorModel.findByIdAndUpdate(
+        authorId,
+        {
+          avatar: avatarUrl,
+        },
+        { new: true }
+      );
+      res.send(updatedAuthor);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default authorsRouter;

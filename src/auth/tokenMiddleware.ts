@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import AuthorModel from "src/services/authors/model";
+import AuthorModel from "../services/authors/model";
 import { verifyJWTToken } from "./tokenTools";
 
 export const tokenMiddleware = async (

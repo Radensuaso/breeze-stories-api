@@ -5,12 +5,12 @@ import { CloudinaryStorage, Options } from "multer-storage-cloudinary";
 
 export const saveAvatarCloudinary = new CloudinaryStorage({
   cloudinary,
-  folder: "breezeStories/avatars",
+  params: { folder: "breezeStories/avatars", format: "png" },
 } as Options);
 
 //=================== Story Images
 
 export const saveStoryImageCloudinary = new CloudinaryStorage({
   cloudinary,
-  folder: "breezeStories/storyImages",
+  params: { folder: "breezeStories/storyImages", format: "png" },
 } as Options);
