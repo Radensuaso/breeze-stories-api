@@ -42,9 +42,9 @@ export const notFoundHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 export const conflictHandler: ErrorRequestHandler = (err, req, res, next) => {
-  if (err.code === 11000) {
+  if (err.status === 409) {
     console.log(err);
-    res.status(409).send({ message: "Authorname already in use." });
+    res.status(409).send({ message: err.message });
   } else {
     next(err);
   }

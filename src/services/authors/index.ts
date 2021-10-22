@@ -22,9 +22,15 @@ authorsRouter.get("/", async (req, res, next) => {
 //===================  Register new author
 authorsRouter.post("/register", async (req, res, next) => {
   try {
-    const newAuthor = new AuthorModel({ ...req.body, role: "Author" });
-    const savedAuthor = await newAuthor.save();
-    res.status(201).send(savedAuthor);
+    const authorname = req.body.authorname;
+    const author = await AuthorModel.findOne({ authorname });
+    if (!author) {
+      const newAuthor = new AuthorModel(req.body);
+      const savedAuthor = await newAuthor.save();
+      res.status(201).send(savedAuthor);
+    } else {
+      next(createHttpError(409, "Authorname already in use."));
+    }
   } catch (error) {
     next(error);
   }
@@ -86,13 +92,17 @@ authorsRouter.get("/me", tokenMiddleware, async (req, res, next) => {
 //=================== Edit my profile
 authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
   try {
-    const authorId = req.author._id;
-    const author = await AuthorModel.findByIdAndUpdate(
-      authorId,
-      { ...req.body, role: "Author" },
-      { new: true }
-    );
-    res.send(author);
+    const authorname = req.body.authorname;
+    const author = await AuthorModel.findOne({ authorname });
+    if (!author) {
+      const authorId = req.author._id;
+      const me = await AuthorModel.findByIdAndUpdate(authorId, req.body, {
+        new: true,
+      });
+      res.send(me);
+    } else {
+      next(createHttpError(409, "Authorname already in use."));
+    }
   } catch (error) {
     next(error);
   }
@@ -102,8 +112,8 @@ authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
 authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
-    const author = await AuthorModel.findByIdAndDelete(authorId);
-    res.send({ message: "You deleted your account.", author });
+    const me = await AuthorModel.findByIdAndDelete(authorId);
+    res.send({ message: "You deleted your account.", me });
   } catch (error) {
     next(error);
   }
@@ -127,8 +137,8 @@ authorsRouter.get("/:authorId", async (req, res, next) => {
 //===================== Enable an admin to delete an author
 authorsRouter.delete(
   "/:authorId/admin",
-  adminMiddleware,
   tokenMiddleware,
+  adminMiddleware,
   async (req, res, next) => {
     try {
       const authorId = req.params.authorId;

@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 const AuthorSchema = new Schema<AuthorDocument>(
   {
     name: { type: String, required: true },
-    authorname: { type: String, required: true, unique: true },
+    authorname: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: {
