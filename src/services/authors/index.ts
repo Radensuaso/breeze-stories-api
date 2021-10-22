@@ -57,7 +57,6 @@ authorsRouter.post(
       console.log(authorId);
 
       const avatarUrl = req.file?.path;
-
       const updatedAuthor = await AuthorModel.findByIdAndUpdate(
         authorId,
         {
@@ -71,5 +70,42 @@ authorsRouter.post(
     }
   }
 );
+
+//==================  Get my profile.
+authorsRouter.get("/me", tokenMiddleware, async (req, res, next) => {
+  try {
+    const authorId = req.author._id;
+    const author = await AuthorModel.findById(authorId);
+    res.send(author);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//=================== Edit my profile
+authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
+  try {
+    const authorId = req.author._id;
+    const author = await AuthorModel.findByIdAndUpdate(
+      authorId,
+      { ...req.body, role: "Author" },
+      { new: true }
+    );
+    res.send(author);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//=================== Delete my profile.
+authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
+  try {
+    const authorId = req.author._id;
+    const author = await AuthorModel.findByIdAndDelete(authorId);
+    res.send({ message: "You deleted your account.", author });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default authorsRouter;
