@@ -3,6 +3,7 @@ import AuthorModel from "./model";
 import { saveAvatarCloudinary } from "../../lib/cloudinaryTools";
 import multer from "multer";
 import { tokenMiddleware } from "../../auth/tokenMiddleware";
+import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
 
@@ -122,5 +123,25 @@ authorsRouter.get("/:authorId", async (req, res, next) => {
     next(error);
   }
 });
+
+//===================== Enable an admin to delete an author
+authorsRouter.delete(
+  "/:authorId/admin",
+  adminMiddleware,
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.params.authorId;
+      const author = await AuthorModel.findByIdAndDelete(authorId);
+      if (author) {
+        res.send({ message: "Author Account was deleted.", author });
+      } else {
+        next(createHttpError(404, "Author not Found."));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default authorsRouter;

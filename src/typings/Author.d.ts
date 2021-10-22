@@ -8,6 +8,7 @@ export interface Author {
   role: "Admin" | "Author";
   avatar: string;
   birthDate: Date;
+  bio: string;
   refreshToken: string;
   googleId: string;
 }

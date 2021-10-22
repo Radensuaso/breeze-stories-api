@@ -18,6 +18,7 @@ const AuthorSchema = new Schema<AuthorDocument>(
     },
     avatar: { type: String },
     birthDate: { type: Date },
+    bio: { type: String },
     refreshToken: { type: String },
     googleId: { type: String },
   },
