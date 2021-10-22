@@ -108,4 +108,19 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
   }
 });
 
+//==================== Get the profile of a single author.
+authorsRouter.get("/:authorId", async (req, res, next) => {
+  try {
+    const authorId = req.params.authorId;
+    const author = await AuthorModel.findById(authorId);
+    if (author) {
+      res.send(author);
+    } else {
+      next(createHttpError(404, "Author not Found."));
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default authorsRouter;
