@@ -2,7 +2,7 @@ import { Document, Model } from "mongoose";
 
 export interface Author {
   name: string;
-  username: string;
+  authorname: string;
   email: string;
   password: string;
   role: "Admin" | "Author";

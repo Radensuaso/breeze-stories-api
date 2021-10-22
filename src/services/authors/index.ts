@@ -32,9 +32,9 @@ authorsRouter.post("/register", async (req, res, next) => {
 //======================= Login author
 authorsRouter.post("/login", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { authorname, password } = req.body;
 
-    const author = await AuthorModel.checkCredentials(username, password);
+    const author = await AuthorModel.checkCredentials(authorname, password);
     if (author) {
       const accessToken = await generateJWTToken(author);
       res.send({ accessToken });

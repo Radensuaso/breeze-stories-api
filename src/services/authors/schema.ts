@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 const AuthorSchema = new Schema<AuthorDocument>(
   {
     name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
+    authorname: { type: String, required: true, unique: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: {
@@ -57,8 +57,8 @@ AuthorSchema.methods.toJSON = function () {
 };
 
 //Checking credentials
-AuthorSchema.statics.checkCredentials = async function (username, password) {
-  const author = await this.findOne({ username });
+AuthorSchema.statics.checkCredentials = async function (authorname, password) {
+  const author = await this.findOne({ authorname });
   if (author) {
     const isMatch = await bcrypt.compare(password, author.password);
     if (isMatch) {

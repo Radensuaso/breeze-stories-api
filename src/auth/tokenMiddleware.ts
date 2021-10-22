@@ -17,10 +17,10 @@ export const tokenMiddleware = async (
         req.author = author;
         next();
       } else {
-        next(createHttpError(404, "user not found"));
+        next(createHttpError(404, "Author not found"));
       }
     } else {
-      next(createHttpError(401, "please provide credentials"));
+      next(createHttpError(401, "Please provide credentials"));
     }
   } catch (error) {
     next(createHttpError(401, "Token not valid"));
