@@ -10,7 +10,7 @@
     "start": "node ./build"
   },
   "keywords": [],
-  "author": "",
+  "author": "André Sousa",
   "license": "ISC",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
