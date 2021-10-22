@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import AuthorSchema from "./schema";
-import { AuthorDocument, AuthorModelType } from "src/typings/Author";
+import { AuthorDocument, AuthorModelType } from "typings/Author";
 
 const { model } = mongoose;
 

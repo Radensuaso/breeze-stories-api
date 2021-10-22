@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { AuthorDocument } from "../../typings/Author";
+import { AuthorDocument } from "../../../typings/Author";
 
 const { Schema } = mongoose;
 

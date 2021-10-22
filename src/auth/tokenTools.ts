@@ -1,5 +1,5 @@
 import JWT from "jsonwebtoken";
-import { DecodedToken, AuthorDocument } from "../typings/Author";
+import { DecodedToken, AuthorDocument } from "../../typings/Author";
 
 process.env.TS_NODE_DEV && require("dotenv").config();
 if (!process.env.JWT_SECRET) {
