@@ -12,9 +12,21 @@ const authorsRouter = express.Router();
 //==================  Get all Authors with queries
 authorsRouter.get("/", async (req, res, next) => {
   try {
-    const authors = await AuthorModel.find();
+    const { name } = req.query;
+    console.log(name);
 
-    res.send(authors);
+    if (name) {
+      const regex = new RegExp(["^", name].join(""), "i");
+      const searchedAuthors = await AuthorModel.find({
+        name: regex,
+      });
+      res.send(searchedAuthors);
+    } else {
+      const authors = await AuthorModel.find({ name: { $exists: true } }).sort({
+        name: 1,
+      });
+      res.send(authors);
+    }
   } catch (error) {
     next(error);
   }
