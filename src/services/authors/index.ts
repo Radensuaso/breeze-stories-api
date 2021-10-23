@@ -7,7 +7,6 @@ import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
 import StoryModel from "../stories/model";
-import { ObjectId } from "mongoose";
 
 const authorsRouter = express.Router();
 
@@ -157,11 +156,11 @@ authorsRouter.delete(
   adminMiddleware,
   async (req, res, next) => {
     try {
-      const authorId = req.params.authorId;
-      const author = await AuthorModel.findByIdAndDelete(authorId);
+      const { authorId } = req.params;
+      const author = await AuthorModel.findById(authorId);
       if (author) {
-        // const authorIdObject = ObjectId(authorId);
-        // await StoryModel.deleteMany({ author: authorIdObject });
+        await AuthorModel.deleteOne({ _id: author._id });
+        await StoryModel.deleteMany({ author: author._id });
         res.send({ message: "Author Account was deleted.", author });
       } else {
         next(createHttpError(404, "Author not Found."));
