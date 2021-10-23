@@ -6,6 +6,8 @@ import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
+import StoryModel from "../stories/model";
+import { ObjectId } from "mongoose";
 
 const authorsRouter = express.Router();
 
@@ -126,6 +128,7 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
     const me = await AuthorModel.findByIdAndDelete(authorId);
+    await StoryModel.deleteMany({ author: authorId });
     res.send({ message: "You deleted your account.", me });
   } catch (error) {
     next(error);
@@ -135,7 +138,7 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
 //==================== Get the profile of a single author.
 authorsRouter.get("/:authorId", async (req, res, next) => {
   try {
-    const authorId = req.params.authorId;
+    const { authorId } = req.params;
     const author = await AuthorModel.findById(authorId);
     if (author) {
       res.send(author);
@@ -157,6 +160,8 @@ authorsRouter.delete(
       const authorId = req.params.authorId;
       const author = await AuthorModel.findByIdAndDelete(authorId);
       if (author) {
+        // const authorIdObject = ObjectId(authorId);
+        // await StoryModel.deleteMany({ author: authorIdObject });
         res.send({ message: "Author Account was deleted.", author });
       } else {
         next(createHttpError(404, "Author not Found."));
