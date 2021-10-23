@@ -2,12 +2,12 @@ import { Document, Model } from "mongoose";
 
 export interface Author {
   name: string;
-  authorname: string;
   email: string;
   password: string;
   role: "Admin" | "Author";
   avatar: string;
   birthDate: Date;
+  gender: string;
   bio: string;
   refreshToken: string;
   googleId: string;

@@ -6,7 +6,6 @@ import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
-import q2m from "query-to-mongo";
 
 const authorsRouter = express.Router();
 
@@ -14,6 +13,7 @@ const authorsRouter = express.Router();
 authorsRouter.get("/", async (req, res, next) => {
   try {
     const authors = await AuthorModel.find();
+
     res.send(authors);
   } catch (error) {
     next(error);
@@ -23,8 +23,8 @@ authorsRouter.get("/", async (req, res, next) => {
 //===================  Register new author
 authorsRouter.post("/register", async (req, res, next) => {
   try {
-    const authorname = req.body.authorname;
-    const author = await AuthorModel.findOne({ authorname });
+    const { email } = req.body;
+    const author = await AuthorModel.findOne({ email });
     if (!author) {
       const newAuthor = new AuthorModel(req.body);
       const savedAuthor = await newAuthor.save();
@@ -40,9 +40,9 @@ authorsRouter.post("/register", async (req, res, next) => {
 //======================= Login author
 authorsRouter.post("/login", async (req, res, next) => {
   try {
-    const { authorname, password } = req.body;
+    const { email, password } = req.body;
 
-    const author = await AuthorModel.checkCredentials(authorname, password);
+    const author = await AuthorModel.checkCredentials(email, password);
     if (author) {
       const accessToken = await generateJWTToken(author);
       res.send({ accessToken });
@@ -93,8 +93,8 @@ authorsRouter.get("/me", tokenMiddleware, async (req, res, next) => {
 //=================== Edit my profile
 authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
   try {
-    const authorname = req.body.authorname;
-    const author = await AuthorModel.findOne({ authorname });
+    const { email } = req.body;
+    const author = await AuthorModel.findOne({ email });
     if (!author) {
       const authorId = req.author._id;
       const me = await AuthorModel.findByIdAndUpdate(authorId, req.body, {

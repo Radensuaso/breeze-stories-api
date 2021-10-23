@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { AuthorDocument } from "../../../typings/Author";
+import randomizeAvatar from "../../lib/randomizeAvatar";
 
 const { Schema } = mongoose;
 
 const AuthorSchema = new Schema<AuthorDocument>(
   {
     name: { type: String, required: true },
-    authorname: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: {
@@ -16,8 +16,9 @@ const AuthorSchema = new Schema<AuthorDocument>(
       enum: ["Admin", "Author"],
       default: "Author",
     },
-    avatar: { type: String },
+    avatar: { type: String, required: true, default: randomizeAvatar() },
     birthDate: { type: Date },
+    gender: { type: String },
     bio: { type: String },
     refreshToken: { type: String },
     googleId: { type: String },
@@ -58,8 +59,8 @@ AuthorSchema.methods.toJSON = function () {
 };
 
 //Checking credentials
-AuthorSchema.statics.checkCredentials = async function (authorname, password) {
-  const author = await this.findOne({ authorname });
+AuthorSchema.statics.checkCredentials = async function (email, password) {
+  const author = await this.findOne({ email });
   if (author) {
     const isMatch = await bcrypt.compare(password, author.password);
     if (isMatch) {
