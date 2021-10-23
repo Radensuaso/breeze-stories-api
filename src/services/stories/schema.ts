@@ -7,26 +7,24 @@ const StorySchema = new Schema<StoryDocument>(
   {
     author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
     title: { type: String, required: true },
-    categories: [
-      {
-        type: String,
-        required: true,
-        enum: [
-          "Mystery",
-          "Thriller",
-          "Horror",
-          "Historical",
-          "Romance",
-          "Sci-fi",
-          "Fantasy",
-          "Dystopian",
-          "True Story",
-        ],
-      },
-    ],
+    categories: {
+      type: [String],
+      validate: (v: void) => Array.isArray(v) && v.length > 0,
+      enum: [
+        "Mystery",
+        "Thriller",
+        "Horror",
+        "Historical",
+        "Romance",
+        "Sci-fi",
+        "Fantasy",
+        "Dystopian",
+        "True Story",
+      ],
+    },
     story: { type: String, required: true },
-    hearts: [{ type: Schema.Types.ObjectId, required: true, ref: "author" }],
-    image: { type: String, required: true },
+    hearts: { type: [Schema.Types.ObjectId], ref: "author" },
+    image: { type: String },
   },
   {
     timestamps: true,

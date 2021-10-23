@@ -39,8 +39,8 @@ authorsRouter.post("/register", async (req, res, next) => {
     const author = await AuthorModel.findOne({ email });
     if (!author) {
       const newAuthor = new AuthorModel(req.body);
-      const savedAuthor = await newAuthor.save();
-      res.status(201).send(savedAuthor);
+      await newAuthor.save();
+      res.status(201).send(newAuthor);
     } else {
       next(createHttpError(409, "Email already in use."));
     }

@@ -9,6 +9,7 @@ import {
   genericServerErrorHandler,
 } from "./errorHandlers";
 import authorsRouter from "./services/authors";
+import storiesRouter from "./services/stories";
 
 const app = express(); //our server function initialized with express()
 
@@ -18,6 +19,7 @@ app.use(express.json()); // this will enable reading of the bodies of requests, 
 
 // ========== ROUTES =======================
 app.use("/authors", authorsRouter);
+app.use("/stories", storiesRouter);
 
 // ============== ERROR HANDLING ==============
 
