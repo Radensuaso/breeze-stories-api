@@ -30,7 +30,7 @@ authorsRouter.post("/register", async (req, res, next) => {
       const savedAuthor = await newAuthor.save();
       res.status(201).send(savedAuthor);
     } else {
-      next(createHttpError(409, "Authorname already in use."));
+      next(createHttpError(409, "Email already in use."));
     }
   } catch (error) {
     next(error);
@@ -102,7 +102,7 @@ authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
       });
       res.send(me);
     } else {
-      next(createHttpError(409, "Authorname already in use."));
+      next(createHttpError(409, "Email already in use."));
     }
   } catch (error) {
     next(error);
