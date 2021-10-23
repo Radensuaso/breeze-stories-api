@@ -28,7 +28,6 @@ const AuthorSchema = new Schema<AuthorDocument>(
   }
 );
 
-//  ======== Hashing passwords
 // creating new
 AuthorSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
@@ -52,10 +51,10 @@ AuthorSchema.pre("findOneAndUpdate", async function (this) {
 
 //Showing json without passwords
 AuthorSchema.methods.toJSON = function () {
-  const userObject: any = this.toObject();
-  delete userObject.password;
-  delete userObject.__v;
-  return userObject;
+  const authorObject: any = this.toObject();
+  delete authorObject.password;
+  delete authorObject.__v;
+  return authorObject;
 };
 
 //Checking credentials

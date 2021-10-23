@@ -1,0 +1,43 @@
+import mongoose from "mongoose";
+import { StoryDocument } from "../../../typings/Story";
+
+const { Schema } = mongoose;
+
+const StorySchema = new Schema<StoryDocument>(
+  {
+    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+    title: { type: String, required: true },
+    categories: [
+      {
+        type: String,
+        required: true,
+        enum: [
+          "Mystery",
+          "Thriller",
+          "Horror",
+          "Historical",
+          "Romance",
+          "Sci-fi",
+          "Fantasy",
+          "Dystopian",
+          "True Story",
+        ],
+      },
+    ],
+    story: { type: String, required: true },
+    hearts: [{ type: Schema.Types.ObjectId, required: true, ref: "author" }],
+    image: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Showing json without __v
+StorySchema.methods.toJSON = function () {
+  const storyObject: any = this.toObject();
+  delete storyObject.__v;
+  return storyObject;
+};
+
+export default StorySchema;
