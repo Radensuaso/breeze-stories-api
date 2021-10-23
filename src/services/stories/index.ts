@@ -11,7 +11,7 @@ const storiesRouter = express.Router();
 //================== Get all stories, with queries
 storiesRouter.get("/", async (req, res, next) => {
   try {
-    const stories = await StoryModel.find();
+    const stories = await StoryModel.find().populate("author");
     res.send(stories);
   } catch (error) {
     next(error);
