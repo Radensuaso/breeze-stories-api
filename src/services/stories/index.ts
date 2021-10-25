@@ -30,4 +30,39 @@ storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
   }
 });
 
+//==================Get all my stories.
+storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
+  try {
+    const authorId = req.author._id;
+    const stories = await StoryModel.find({ author: authorId });
+    res.send(stories);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// //====================Post an image to the Story.
+// storiesRouter.post(
+//     "/avatar",
+//     tokenMiddleware,
+//     multer({ storage: saveStoryImageCloudinary }).single("storyImage"),
+//     async (req, res, next) => {
+//       try {
+//         const authorId = req.author._id;
+//         console.log(authorId);
+
+//         const avatarUrl = req.file?.path;
+//         const updatedAuthor = await AuthorModel.findByIdAndUpdate(
+//           authorId,
+//           {
+//             avatar: avatarUrl,
+//           },
+//           { new: true }
+//         );
+//         res.send(updatedAuthor);
+//       } catch (error) {
+//         next(error);
+//       }
+//     }
+//   );
 export default storiesRouter;
