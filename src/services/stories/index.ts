@@ -109,4 +109,22 @@ storiesRouter.post(
     }
   }
 );
+
+//====================Get one Story
+storiesRouter.get("/:storyId", async (req, res, next) => {
+  try {
+    const { storyId } = req.params;
+    const story = await StoryModel.findById(storyId);
+    if (story) {
+      res.send(story);
+    } else {
+      next(
+        createHttpError(404, `The story with the id: ${storyId} was not found.`)
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default storiesRouter;
