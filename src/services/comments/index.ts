@@ -125,4 +125,47 @@ commentsRouter.delete(
   }
 );
 
+//====================Post or remove a heart
+commentsRouter.post(
+  "/:commentId/hearts",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { commentId } = req.params;
+      const authorHearted = await CommentModel.findOne({
+        _id: commentId,
+        hearts: authorId,
+      });
+      if (authorHearted) {
+        const unheartedComment = await CommentModel.findByIdAndUpdate(
+          commentId,
+          {
+            $pull: { hearts: authorId },
+          },
+          { new: true }
+        );
+        res.send({
+          message: "You unhearted the comment.",
+          comment: unheartedComment,
+        });
+      } else {
+        const heartedComment = await CommentModel.findByIdAndUpdate(
+          commentId,
+          {
+            $push: { hearts: authorId },
+          },
+          { new: true }
+        );
+        res.send({
+          message: "You hearted the comment.",
+          comment: heartedComment,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default commentsRouter;

@@ -200,7 +200,7 @@ storiesRouter.post(
           },
           { new: true }
         );
-        res.send(unheartedStory);
+        res.send({ message: "You unhearted the Story", story: unheartedStory });
       } else {
         const heartedStory = await StoryModel.findByIdAndUpdate(
           storyId,
@@ -209,7 +209,7 @@ storiesRouter.post(
           },
           { new: true }
         );
-        res.send(heartedStory);
+        res.send({ message: "You hearted the Story", story: heartedStory });
       }
     } catch (error) {
       next(error);
