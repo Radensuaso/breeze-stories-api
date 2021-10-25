@@ -7,7 +7,7 @@ export interface Story {
   categories: string[];
   story: string;
   hearts: AuthorDocument[];
-  image: string;
+  storyImage: string;
 }
 
 export interface StoryDocument extends Document, Story {}

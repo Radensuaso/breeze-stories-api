@@ -79,28 +79,34 @@ storiesRouter.get("/random", async (req, res, next) => {
   }
 });
 
-// //====================Post an image to the Story.
-// storiesRouter.post(
-//     "/avatar",
-//     tokenMiddleware,
-//     multer({ storage: saveStoryImageCloudinary }).single("storyImage"),
-//     async (req, res, next) => {
-//       try {
-//         const authorId = req.author._id;
-//         console.log(authorId);
+//====================Post an image to the Story.
+storiesRouter.post(
+  "/:storyId/storyImage",
+  tokenMiddleware,
+  multer({ storage: saveStoryImageCloudinary }).single("storyImage"),
+  async (req, res, next) => {
+    try {
+      const { storyId } = req.params;
+      const authorId = req.author._id;
 
-//         const avatarUrl = req.file?.path;
-//         const updatedAuthor = await AuthorModel.findByIdAndUpdate(
-//           authorId,
-//           {
-//             avatar: avatarUrl,
-//           },
-//           { new: true }
-//         );
-//         res.send(updatedAuthor);
-//       } catch (error) {
-//         next(error);
-//       }
-//     }
-//   );
+      const storyImage = req.file?.path;
+      const updatedStory = await StoryModel.findOneAndUpdate(
+        { _id: storyId, author: authorId },
+        {
+          storyImage,
+        },
+        { new: true }
+      );
+      if (updatedStory) {
+        res.send(updatedStory);
+      } else {
+        next(
+          createHttpError(404, `Story with the id: ${storyId} was not found.`)
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 export default storiesRouter;

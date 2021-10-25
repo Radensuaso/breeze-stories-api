@@ -24,7 +24,7 @@ const StorySchema = new Schema<StoryDocument>(
     },
     story: { type: String, required: true },
     hearts: { type: [Schema.Types.ObjectId], ref: "author" },
-    image: { type: String },
+    storyImage: { type: String },
   },
   {
     timestamps: true,

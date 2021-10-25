@@ -75,13 +75,12 @@ authorsRouter.post(
   async (req, res, next) => {
     try {
       const authorId = req.author._id;
-      console.log(authorId);
 
-      const avatarUrl = req.file?.path;
+      const avatar = req.file?.path;
       const updatedAuthor = await AuthorModel.findByIdAndUpdate(
         authorId,
         {
-          avatar: avatarUrl,
+          avatar,
         },
         { new: true }
       );
