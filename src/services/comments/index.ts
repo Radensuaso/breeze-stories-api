@@ -42,7 +42,9 @@ commentsRouter.post(
           author: authorId,
         });
         await newComment.save();
-        res.status(201).send(newComment);
+        res
+          .status(201)
+          .send({ message: "Your comment was created.", comment: newComment });
       } else {
         next(
           createHttpError(
@@ -74,7 +76,41 @@ commentsRouter.put(
         { new: true }
       );
       if (updatedComment) {
-        res.send(updatedComment);
+        res.send({
+          message: "Your comment was updated.",
+          comment: updatedComment,
+        });
+      } else {
+        next(
+          createHttpError(
+            404,
+            `The comment with the id: ${commentId} was not found.`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//==================Delete my comment.
+commentsRouter.delete(
+  "/:commentId/me",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { commentId } = req.params;
+      const deletedComment = await CommentModel.findOneAndDelete({
+        _id: commentId,
+        author: authorId,
+      });
+      if (deletedComment) {
+        res.send({
+          message: "Your comment was deleted.",
+          comment: deletedComment,
+        });
       } else {
         next(
           createHttpError(

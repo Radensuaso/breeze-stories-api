@@ -24,7 +24,9 @@ storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
     const authorId = req.author._id;
     const newStory = new StoryModel({ ...req.body, author: authorId });
     await newStory.save();
-    res.status(201).send(newStory);
+    res
+      .status(201)
+      .send({ message: "You posted a new story.", story: newStory });
   } catch (error) {
     next(error);
   }
@@ -114,7 +116,10 @@ storiesRouter.post(
         { new: true }
       );
       if (updatedStory) {
-        res.send(updatedStory);
+        res.send({
+          message: "You successfully posted an image to your story.",
+          story: updatedStory,
+        });
       } else {
         next(
           createHttpError(404, `Story with the id: ${storyId} was not found.`)
@@ -138,7 +143,7 @@ storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
       { new: true }
     );
     if (updatedStory) {
-      res.send(updatedStory);
+      res.send({ message: "Your story was updated", story: updatedStory });
     } else {
       next(
         createHttpError(404, `The story with id: ${storyId} was not found.`)

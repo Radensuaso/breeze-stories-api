@@ -40,7 +40,10 @@ authorsRouter.post("/register", async (req, res, next) => {
     if (!author) {
       const newAuthor = new AuthorModel(req.body);
       await newAuthor.save();
-      res.status(201).send(newAuthor);
+      res.status(201).send({
+        message: "You successfully created a profile.",
+        author: newAuthor,
+      });
     } else {
       next(createHttpError(409, "Email already in use."));
     }
@@ -83,7 +86,10 @@ authorsRouter.post(
         },
         { new: true }
       );
-      res.send(updatedAuthor);
+      res.send({
+        message: "You successfully posted an avatar to your profile.",
+        author: updatedAuthor,
+      });
     } catch (error) {
       next(error);
     }
@@ -111,7 +117,7 @@ authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
       const me = await AuthorModel.findByIdAndUpdate(authorId, req.body, {
         new: true,
       });
-      res.send(me);
+      res.send({ message: "You updated your profile.", me });
     } else {
       next(createHttpError(409, "Email already in use."));
     }
@@ -127,7 +133,7 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
     const author = await AuthorModel.findById(authorId);
     if (author) {
       await StoryModel.deleteMany({ author: author._id });
-      res.send({ message: "You deleted your account.", author });
+      res.send({ message: "You deleted your profile.", author });
     } else {
       next(createHttpError(404, "Author does not exist."));
     }
