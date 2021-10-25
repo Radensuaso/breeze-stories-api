@@ -57,4 +57,36 @@ commentsRouter.post(
   }
 );
 
+//====================Edit my comment.
+commentsRouter.put(
+  "/:commentId/me",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { commentId } = req.params;
+      const updatedComment = await CommentModel.findOneAndUpdate(
+        {
+          _id: commentId,
+          author: authorId,
+        },
+        req.body,
+        { new: true }
+      );
+      if (updatedComment) {
+        res.send(updatedComment);
+      } else {
+        next(
+          createHttpError(
+            404,
+            `The comment with the id: ${commentId} was not found.`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default commentsRouter;
