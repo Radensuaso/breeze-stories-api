@@ -168,4 +168,31 @@ commentsRouter.post(
   }
 );
 
+//=====================Post a new sub comment in a comment
+commentsRouter.post(
+  "/:commentId/subComments",
+  tokenMiddleware,
+  async (req, res, next) => {
+    const authorId = req.author._id;
+    const { commentId } = req.params;
+    const updatedComment = await CommentModel.findByIdAndUpdate(
+      commentId,
+      { $push: { subComments: { ...req.body, author: authorId } } },
+      { new: true }
+    );
+    if (updatedComment) {
+      res.status(201).send({
+        message: "Your sub comment was created.",
+        comment: updatedComment,
+      });
+    } else {
+      next(
+        createHttpError(
+          404,
+          `The comment with the id: ${commentId} was not found.`
+        )
+      );
+    }
+  }
+);
 export default commentsRouter;
