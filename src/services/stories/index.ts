@@ -79,6 +79,23 @@ storiesRouter.get("/random", async (req, res, next) => {
   }
 });
 
+//====================Get one Story
+storiesRouter.get("/:storyId", async (req, res, next) => {
+  try {
+    const { storyId } = req.params;
+    const story = await StoryModel.findById(storyId);
+    if (story) {
+      res.send(story);
+    } else {
+      next(
+        createHttpError(404, `The story with the id: ${storyId} was not found.`)
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 //====================Post an image to the Story.
 storiesRouter.post(
   "/:storyId/storyImage",
@@ -86,8 +103,8 @@ storiesRouter.post(
   multer({ storage: saveStoryImageCloudinary }).single("storyImage"),
   async (req, res, next) => {
     try {
-      const { storyId } = req.params;
       const authorId = req.author._id;
+      const { storyId } = req.params;
 
       const storyImage = req.file?.path;
       const updatedStory = await StoryModel.findOneAndUpdate(
@@ -110,16 +127,22 @@ storiesRouter.post(
   }
 );
 
-//====================Get one Story
-storiesRouter.get("/:storyId", async (req, res, next) => {
+//=======================Edit my Story.
+storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
   try {
+    const authorId = req.author._id;
     const { storyId } = req.params;
-    const story = await StoryModel.findById(storyId);
-    if (story) {
-      res.send(story);
+
+    const updatedStory = await StoryModel.findOneAndUpdate(
+      { _id: storyId, author: authorId },
+      req.body,
+      { new: true }
+    );
+    if (updatedStory) {
+      res.send(updatedStory);
     } else {
       next(
-        createHttpError(404, `The story with the id: ${storyId} was not found.`)
+        createHttpError(404, `The story with id: ${storyId} was not found.`)
       );
     }
   } catch (error) {
