@@ -6,22 +6,18 @@ import { StoryDocument } from "./Story";
 
 export interface SubComment {
   author: AuthorDocument;
-  content: string;
-  image: string;
+  subComment: string;
   hearts: AuthorDocument[];
 }
 
 export interface SubCommentDocument extends Document, SubComment {}
 
-export interface SubCommentModelType extends Model<SubCommentDocument> {}
-
 //================ Comment
 
 export interface Comment {
-  storyId: StoryDocument;
+  story: StoryDocument;
   author: AuthorDocument;
-  content: string;
-  image: string;
+  comment: string;
   hearts: AuthorDocument[];
   subComments: SubCommentDocument[];
 }

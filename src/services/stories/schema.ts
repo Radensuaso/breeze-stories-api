@@ -23,7 +23,7 @@ const StorySchema = new Schema<StoryDocument>(
       ],
     },
     story: { type: String, required: true },
-    hearts: { type: [Schema.Types.ObjectId], ref: "author" },
+    hearts: { type: [Schema.Types.ObjectId], ref: "author", required: true },
     storyImage: { type: String },
   },
   {
