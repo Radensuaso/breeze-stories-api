@@ -176,4 +176,41 @@ storiesRouter.delete(
   }
 );
 
+//=========================Post or remove a heart
+storiesRouter.post(
+  "/:storyId/hearts",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { storyId } = req.params;
+      const authorHearted = await StoryModel.findOne({
+        _id: storyId,
+        hearts: authorId,
+      });
+      if (authorHearted) {
+        const unheartedStory = await StoryModel.findByIdAndUpdate(
+          storyId,
+          {
+            $pull: { hearts: authorId },
+          },
+          { new: true }
+        );
+        res.send(unheartedStory);
+      } else {
+        const heartedStory = await StoryModel.findByIdAndUpdate(
+          storyId,
+          {
+            $push: { hearts: authorId },
+          },
+          { new: true }
+        );
+        res.send(heartedStory);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default storiesRouter;
