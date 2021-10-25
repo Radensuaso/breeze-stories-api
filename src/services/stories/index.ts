@@ -24,7 +24,7 @@ storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
     const authorId = req.author._id;
     const newStory = new StoryModel({ ...req.body, author: authorId });
     await newStory.save();
-    res.send(newStory);
+    res.status(201).send(newStory);
   } catch (error) {
     next(error);
   }
