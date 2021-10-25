@@ -3,7 +3,6 @@ import AuthorModel from "./model";
 import { saveAvatarCloudinary } from "../../lib/cloudinaryTools";
 import multer from "multer";
 import { tokenMiddleware } from "../../auth/tokenMiddleware";
-import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
 import StoryModel from "../stories/model";
@@ -125,9 +124,13 @@ authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
 authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
-    const me = await AuthorModel.findByIdAndDelete(authorId);
-    await StoryModel.deleteMany({ author: authorId });
-    res.send({ message: "You deleted your account.", me });
+    const author = await AuthorModel.findById(authorId);
+    if (author) {
+      await StoryModel.deleteMany({ author: author._id });
+      res.send({ message: "You deleted your account.", author });
+    } else {
+      next(createHttpError(404, "Author does not exist."));
+    }
   } catch (error) {
     next(error);
   }
@@ -147,27 +150,5 @@ authorsRouter.get("/:authorId", async (req, res, next) => {
     next(error);
   }
 });
-
-//===================== Enable an admin to delete an author
-authorsRouter.delete(
-  "/:authorId/admin",
-  tokenMiddleware,
-  adminMiddleware,
-  async (req, res, next) => {
-    try {
-      const { authorId } = req.params;
-      const author = await AuthorModel.findById(authorId);
-      if (author) {
-        await AuthorModel.deleteOne({ _id: author._id });
-        await StoryModel.deleteMany({ author: author._id });
-        res.send({ message: "Author Account was deleted.", author });
-      } else {
-        next(createHttpError(404, "Author not Found."));
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 export default authorsRouter;

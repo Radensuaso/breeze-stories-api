@@ -4,7 +4,6 @@ export interface Author {
   name: string;
   email: string;
   password: string;
-  role: "Admin" | "Author";
   avatar: string;
   birthDate: Date;
   gender: string;

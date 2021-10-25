@@ -10,12 +10,6 @@ const AuthorSchema = new Schema<AuthorDocument>(
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    role: {
-      type: String,
-      required: true,
-      enum: ["Admin", "Author"],
-      default: "Author",
-    },
     avatar: { type: String, required: true, default: randomizeAvatar() },
     birthDate: { type: Date },
     gender: { type: String },

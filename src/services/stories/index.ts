@@ -4,7 +4,6 @@ import AuthorModel from "../authors/model";
 import { saveStoryImageCloudinary } from "../../lib/cloudinaryTools";
 import multer from "multer";
 import { tokenMiddleware } from "../../auth/tokenMiddleware";
-import adminMiddleware from "../../auth/adminMiddleware";
 import createHttpError from "http-errors";
 
 const storiesRouter = express.Router();
