@@ -195,4 +195,50 @@ commentsRouter.post(
     }
   }
 );
+
+//======================Edit my Sub comment
+commentsRouter.put(
+  "/:commentId/subComments/:subCommentId/me",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { commentId } = req.params;
+      const { subCommentId } = req.params;
+      const updatedComment = await CommentModel.findOneAndUpdate(
+        {
+          _id: commentId,
+          "subComments.author": authorId,
+          "subComments._id": subCommentId,
+        },
+        {
+          $set: {
+            "subComments.$": {
+              ...req.body,
+              _id: subCommentId,
+              author: authorId,
+            },
+          },
+        },
+        { new: true }
+      );
+      if (updatedComment) {
+        res.send({
+          message: "Your sub comment was updated.",
+          comment: updatedComment,
+        });
+      } else {
+        next(
+          createHttpError(
+            404,
+            `The comment with the id: ${commentId} was not found.`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default commentsRouter;
