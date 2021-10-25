@@ -150,4 +150,30 @@ storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
   }
 });
 
+//=======================Delete my story
+storiesRouter.delete(
+  "/:storyId/me",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { storyId } = req.params;
+
+      const deletedStory = await StoryModel.findOneAndDelete({
+        _id: storyId,
+        author: authorId,
+      });
+      if (deletedStory) {
+        res.send({ message: "Your story was deleted", story: deletedStory });
+      } else {
+        next(
+          createHttpError(404, `The story with id: ${storyId} was not found.`)
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default storiesRouter;
