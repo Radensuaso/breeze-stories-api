@@ -350,15 +350,15 @@ commentsRouter.post(
     const { subCommentId } = req.params;
     const authorHearted = await CommentModel.findOne({
       _id: commentId,
-      "subComments.hearts": authorId,
       "subComments._id": subCommentId,
+      "subComments.hearts": authorId,
     });
     if (authorHearted) {
       const unheartedComment = await CommentModel.findOneAndUpdate(
         {
           _id: commentId,
-          "subComments.hearts": authorId,
           "subComments._id": subCommentId,
+          "subComments.hearts": authorId,
         },
         {
           $pull: { "subComments.$.hearts": authorId },

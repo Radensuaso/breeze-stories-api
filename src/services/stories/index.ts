@@ -1,6 +1,7 @@
 import express from "express";
 import StoryModel from "./model";
 import AuthorModel from "../authors/model";
+import CommentModel from "../comments/model";
 import { saveStoryImageCloudinary } from "../../lib/cloudinaryTools";
 import multer from "multer";
 import { tokenMiddleware } from "../../auth/tokenMiddleware";
@@ -163,12 +164,17 @@ storiesRouter.delete(
       const authorId = req.author._id;
       const { storyId } = req.params;
 
-      const deletedStory = await StoryModel.findOneAndDelete({
+      const story = await StoryModel.findOne({
         _id: storyId,
         author: authorId,
       });
-      if (deletedStory) {
-        res.send({ message: "Your story was deleted", story: deletedStory });
+      if (story) {
+        await StoryModel.deleteOne({ _id: story._id });
+        await CommentModel.deleteMany({ author: story._id });
+        res.send({
+          message: "Your story was deleted",
+          story,
+        });
       } else {
         next(
           createHttpError(404, `The story with id: ${storyId} was not found.`)

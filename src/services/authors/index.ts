@@ -132,6 +132,7 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
     const authorId = req.author._id;
     const author = await AuthorModel.findById(authorId);
     if (author) {
+      await AuthorModel.deleteOne({ _id: author._id });
       await StoryModel.deleteMany({ author: author._id });
       res.send({ message: "You deleted your profile.", author });
     } else {
