@@ -13,23 +13,41 @@ const storiesRouter = express.Router();
 storiesRouter.get("/", async (req, res, next) => {
   try {
     const { title } = req.query;
-    const categories = req.query.categories as string[];
-    const { skip } = req.query;
-    const { limit } = req.query;
-
+    const categories = req.query.categories as string;
+    const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const regex = new RegExp(["^", title].join(""), "i");
     if (title) {
-      const regex = new RegExp(["^", title].join(""), "i");
-      const searchedTitleStories = await StoryModel.find(
-        {
-          title: regex,
-        },
-        { limit, skip }
-      );
+      const searchedTitleStories = await StoryModel.find({
+        title: regex,
+      })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
       res.send(searchedTitleStories);
     } else if (categories) {
       const searchedCategoriesStories = await StoryModel.find({
-        categories: { $in: categories },
-      });
+        categories: categories,
+      })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      res.send(searchedCategoriesStories);
+    } else if (title && categories) {
+      const searchedTitleCategoriesStories = await StoryModel.find({
+        title: regex,
+        categories: categories,
+      })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      res.send(searchedTitleCategoriesStories);
+    } else {
+      const stories = await StoryModel.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      res.send(stories);
     }
   } catch (error) {
     next(error);

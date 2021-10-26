@@ -23,7 +23,7 @@ authorsRouter.get("/", async (req, res, next) => {
       });
       res.send(searchedAuthors);
     } else {
-      const authors = await AuthorModel.find({ name: { $exists: true } }).sort({
+      const authors = await AuthorModel.find().sort({
         name: 1,
       });
       res.send(authors);
