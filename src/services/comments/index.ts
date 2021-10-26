@@ -219,6 +219,41 @@ commentsRouter.post(
   }
 );
 
+//=====================Get a single Sub Comment
+commentsRouter.get(
+  "/:commentId/subComments/:subCommentId",
+  async (req, res, next) => {
+    try {
+      const { commentId } = req.params;
+      const comment = await CommentModel.findById(commentId).populate({
+        path: "subComments.author",
+      });
+      if (comment) {
+        const { subCommentId } = req.params;
+        const subComment = comment.subComments.find(
+          (sC) => sC._id.toString() === subCommentId
+        );
+        if (subComment) {
+          res.send(subComment);
+        } else {
+          next(
+            createHttpError(
+              404,
+              `The sub comment with id: ${subCommentId} not found.`
+            )
+          );
+        }
+      } else {
+        next(
+          createHttpError(404, `The comment with id: ${commentId} not found.`)
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 //======================Update my Sub comment
 commentsRouter.put(
   "/:commentId/subComments/:subCommentId/me",
@@ -240,7 +275,6 @@ commentsRouter.put(
               ...req.body,
               _id: subCommentId,
               author: authorId,
-              updatedAt: new Date(),
             },
           },
         },
@@ -249,6 +283,47 @@ commentsRouter.put(
       if (updatedComment) {
         res.send({
           message: "Your sub comment was updated.",
+          comment: updatedComment,
+        });
+      } else {
+        next(
+          createHttpError(
+            404,
+            `The comment with the id: ${commentId} was not found.`
+          )
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//=====================Delete my sub comment
+commentsRouter.delete(
+  "/:commentId/subComments/:subCommentId/me",
+  tokenMiddleware,
+  async (req, res, next) => {
+    try {
+      const authorId = req.author._id;
+      const { commentId } = req.params;
+      const { subCommentId } = req.params;
+      const updatedComment = await CommentModel.findOneAndUpdate(
+        {
+          _id: commentId,
+          "subComments.author": authorId,
+          "subComments._id": subCommentId,
+        },
+        {
+          $pull: {
+            subComments: { _id: subCommentId },
+          },
+        },
+        { new: true }
+      );
+      if (updatedComment) {
+        res.send({
+          message: "Your sub comment was deleted.",
           comment: updatedComment,
         });
       } else {
