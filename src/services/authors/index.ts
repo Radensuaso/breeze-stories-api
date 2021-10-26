@@ -107,7 +107,7 @@ authorsRouter.get("/me", tokenMiddleware, async (req, res, next) => {
   }
 });
 
-//=================== Edit my profile
+//=================== Update my profile
 authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const { email } = req.body;

@@ -3,6 +3,7 @@ import CommentModel from "./model";
 import StoryModel from "../stories/model";
 import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import createHttpError from "http-errors";
+import { CommentDocument } from "typings/Comment";
 
 const commentsRouter = express.Router();
 
@@ -12,9 +13,9 @@ commentsRouter.get("/story/:storyId", async (req, res, next) => {
     const { storyId } = req.params;
     const story = await StoryModel.findById(storyId);
     if (story) {
-      const comments = await CommentModel.find({ story: story._id }).populate(
-        "author"
-      );
+      const comments = await CommentModel.find({ story: story._id })
+        .populate("author")
+        .populate({ path: "subComments.author" });
       res.send(comments);
     } else {
       next(
@@ -59,7 +60,29 @@ commentsRouter.post(
   }
 );
 
-//====================Edit my comment.
+//=====================Get a single comment.
+commentsRouter.get("/:commentId", async (req, res, next) => {
+  try {
+    const { commentId } = req.params;
+    const comment = await CommentModel.findById(commentId)
+      .populate("author")
+      .populate({ path: "subComments.author" });
+    if (comment) {
+      res.send(comment);
+    } else {
+      next(
+        createHttpError(
+          404,
+          `The comment with the id: ${commentId} was not found.`
+        )
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+//====================Update my comment.
 commentsRouter.put(
   "/:commentId/me",
   tokenMiddleware,
@@ -196,7 +219,7 @@ commentsRouter.post(
   }
 );
 
-//======================Edit my Sub comment
+//======================Update my Sub comment
 commentsRouter.put(
   "/:commentId/subComments/:subCommentId/me",
   tokenMiddleware,
@@ -217,6 +240,7 @@ commentsRouter.put(
               ...req.body,
               _id: subCommentId,
               author: authorId,
+              updatedAt: new Date(),
             },
           },
         },

@@ -131,7 +131,7 @@ storiesRouter.post(
   }
 );
 
-//=======================Edit my Story.
+//=======================Update my Story.
 storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
