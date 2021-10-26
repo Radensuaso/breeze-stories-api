@@ -13,7 +13,6 @@ const authorsRouter = express.Router();
 authorsRouter.get("/", async (req, res, next) => {
   try {
     const { name } = req.query;
-    console.log(name);
 
     if (name) {
       const regex = new RegExp(["^", name].join(""), "i");

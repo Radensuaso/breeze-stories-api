@@ -3,14 +3,11 @@ import { SubCommentDocument, CommentDocument } from "../../../typings/Comment";
 
 const { Schema } = mongoose;
 
-const SubCommentSchema = new Schema<SubCommentDocument>(
-  {
-    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
-    subComment: { type: String, required: true },
-    hearts: { type: [Schema.Types.ObjectId], required: true, ref: "author" },
-  },
-  { timestamps: true }
-);
+const SubCommentSchema = new Schema<SubCommentDocument>({
+  author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+  subComment: { type: String, required: true },
+  hearts: { type: [Schema.Types.ObjectId], required: true, ref: "author" },
+});
 
 const CommentSchema = new Schema<CommentDocument>(
   {

@@ -12,8 +12,25 @@ const storiesRouter = express.Router();
 //================== Get all stories, with queries
 storiesRouter.get("/", async (req, res, next) => {
   try {
-    const stories = await StoryModel.find().populate("author");
-    res.send(stories);
+    const { title } = req.query;
+    const categories = req.query.categories as string[];
+    const { skip } = req.query;
+    const { limit } = req.query;
+
+    if (title) {
+      const regex = new RegExp(["^", title].join(""), "i");
+      const searchedTitleStories = await StoryModel.find(
+        {
+          title: regex,
+        },
+        { limit, skip }
+      );
+      res.send(searchedTitleStories);
+    } else if (categories) {
+      const searchedCategoriesStories = await StoryModel.find({
+        categories: { $in: categories },
+      });
+    }
   } catch (error) {
     next(error);
   }
