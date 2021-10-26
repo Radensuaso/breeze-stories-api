@@ -19,6 +19,8 @@ authorsRouter.get("/", async (req, res, next) => {
       const regex = new RegExp(["^", name].join(""), "i");
       const searchedAuthors = await AuthorModel.find({
         name: regex,
+      }).sort({
+        name: 1,
       });
       res.send(searchedAuthors);
     } else {
