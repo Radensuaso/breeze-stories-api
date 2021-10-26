@@ -148,7 +148,7 @@ commentsRouter.delete(
   }
 );
 
-//====================Post or remove a heart
+//====================Post or remove a heart to a comment
 commentsRouter.post(
   "/:commentId/hearts",
   tokenMiddleware,
@@ -336,6 +336,54 @@ commentsRouter.delete(
       }
     } catch (error) {
       next(error);
+    }
+  }
+);
+
+//========================Post or remove a heart to a sub comment
+commentsRouter.post(
+  "/:commentId/subComments/:subCommentId/hearts",
+  tokenMiddleware,
+  async (req, res, next) => {
+    const authorId = req.author._id;
+    const { commentId } = req.params;
+    const { subCommentId } = req.params;
+    const authorHearted = await CommentModel.findOne({
+      _id: commentId,
+      "subComments.hearts": authorId,
+      "subComments._id": subCommentId,
+    });
+    if (authorHearted) {
+      const unheartedComment = await CommentModel.findOneAndUpdate(
+        {
+          _id: commentId,
+          "subComments.hearts": authorId,
+          "subComments._id": subCommentId,
+        },
+        {
+          $pull: { "subComments.$.hearts": authorId },
+        },
+        { new: true }
+      );
+      res.send({
+        message: "You unhearted the sub comment.",
+        comment: unheartedComment,
+      });
+    } else {
+      const heartedComment = await CommentModel.findOneAndUpdate(
+        {
+          _id: commentId,
+          "subComments._id": subCommentId,
+        },
+        {
+          $push: { "subComments.$.hearts": authorId },
+        },
+        { new: true }
+      );
+      res.send({
+        message: "You hearted the sub comment.",
+        comment: heartedComment,
+      });
     }
   }
 );
