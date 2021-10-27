@@ -12,8 +12,8 @@ const storiesRouter = express.Router();
 //================== Get all stories, with queries
 storiesRouter.get("/", async (req, res, next) => {
   try {
-    const { title } = req.query;
-    const categories = req.query.categories as string;
+    const title = req.query.title;
+    const categories = req.query.categories as string[];
     const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
     const regex = new RegExp(["^", title].join(""), "i");
@@ -27,7 +27,7 @@ storiesRouter.get("/", async (req, res, next) => {
       res.send(searchedTitleStories);
     } else if (categories) {
       const searchedCategoriesStories = await StoryModel.find({
-        categories: categories,
+        categories: { $in: categories },
       })
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -36,7 +36,7 @@ storiesRouter.get("/", async (req, res, next) => {
     } else if (title && categories) {
       const searchedTitleCategoriesStories = await StoryModel.find({
         title: regex,
-        categories: categories,
+        categories: { $in: categories },
       })
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -72,7 +72,22 @@ storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
 storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
-    const stories = await StoryModel.find({ author: authorId });
+    const stories = await StoryModel.find({ author: authorId }).sort({
+      createdAt: -1,
+    });
+    res.send(stories);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//==================== Get all stories I hearted.
+storiesRouter.get("/hearts", tokenMiddleware, async (req, res, next) => {
+  try {
+    const authorId = req.author._id;
+    const stories = await StoryModel.find({ hearts: authorId }).sort({
+      createdAt: -1,
+    });
     res.send(stories);
   } catch (error) {
     next(error);
