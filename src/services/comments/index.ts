@@ -219,41 +219,6 @@ commentsRouter.post(
   }
 );
 
-//=====================Get a single Sub Comment
-commentsRouter.get(
-  "/:commentId/subComments/:subCommentId",
-  async (req, res, next) => {
-    try {
-      const { commentId } = req.params;
-      const comment = await CommentModel.findById(commentId).populate({
-        path: "subComments.author",
-      });
-      if (comment) {
-        const { subCommentId } = req.params;
-        const subComment = comment.subComments.find(
-          (sC) => sC._id.toString() === subCommentId
-        );
-        if (subComment) {
-          res.send(subComment);
-        } else {
-          next(
-            createHttpError(
-              404,
-              `The sub comment with id: ${subCommentId} not found.`
-            )
-          );
-        }
-      } else {
-        next(
-          createHttpError(404, `The comment with id: ${commentId} not found.`)
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 //=====================Delete my sub comment
 commentsRouter.delete(
   "/:commentId/subComments/:subCommentId/me",
