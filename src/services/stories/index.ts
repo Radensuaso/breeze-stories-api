@@ -102,7 +102,9 @@ storiesRouter.get("/author/:authorId", async (req, res, next) => {
     console.log(authorId);
 
     if (author) {
-      const stories = await StoryModel.find({ author: author._id });
+      const stories = await StoryModel.find({ author: author._id }).sort({
+        createdAt: -1,
+      });
       res.send(stories);
     } else {
       next(
