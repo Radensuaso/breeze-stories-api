@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 3001;
 if (!process.env.MONGO_CONNECTION) {
   throw new Error("No Mongo connection defined.");
 }
+
+mongoose.set("debug", true);
 mongoose.connect(process.env.MONGO_CONNECTION);
 
 mongoose.connection.on("connected", () => {
