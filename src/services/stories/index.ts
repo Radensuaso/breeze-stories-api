@@ -15,7 +15,7 @@ storiesRouter.get("/", async (req, res, next) => {
     const title = req.query.title;
     const category = req.query.category as string[];
     const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
-    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 0;
     const regex = new RegExp(["^", title].join(""), "i");
     if (title && category) {
       const searchedTitleCategoriesStories = await StoryModel.find({
@@ -23,7 +23,8 @@ storiesRouter.get("/", async (req, res, next) => {
       })
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("author");
       res.send(searchedTitleCategoriesStories);
     } else if (title) {
       const searchedTitleStories = await StoryModel.find({
@@ -31,7 +32,8 @@ storiesRouter.get("/", async (req, res, next) => {
       })
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("author");
       res.send(searchedTitleStories);
     } else if (category) {
       const searchedCategoriesStories = await StoryModel.find({
@@ -39,13 +41,15 @@ storiesRouter.get("/", async (req, res, next) => {
       })
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("author");
       res.send(searchedCategoriesStories);
     } else {
       const stories = await StoryModel.find()
         .sort({ createdAt: -1 })
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("author");
       res.send(stories);
     }
   } catch (error) {
