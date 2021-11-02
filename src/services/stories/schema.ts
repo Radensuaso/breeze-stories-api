@@ -19,7 +19,6 @@ const StorySchema = new Schema<StoryDocument>(
         "Sci-fi",
         "Fantasy",
         "Dystopian",
-        "True Story",
       ],
     },
     story: { type: String, required: true },
