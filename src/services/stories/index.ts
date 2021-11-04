@@ -75,9 +75,11 @@ storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
 storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
-    const stories = await StoryModel.find({ author: authorId }).sort({
-      createdAt: -1,
-    });
+    const stories = await StoryModel.find({ author: authorId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("author");
     res.send(stories);
   } catch (error) {
     next(error);
@@ -88,9 +90,11 @@ storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
 storiesRouter.get("/hearts", tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
-    const stories = await StoryModel.find({ hearts: authorId }).sort({
-      createdAt: -1,
-    });
+    const stories = await StoryModel.find({ hearts: authorId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("author");
     res.send(stories);
   } catch (error) {
     next(error);
