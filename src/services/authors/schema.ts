@@ -14,8 +14,6 @@ const AuthorSchema = new Schema<AuthorDocument>(
     birthDate: { type: Date },
     gender: { type: String },
     bio: { type: String },
-    refreshToken: { type: String },
-    googleId: { type: String },
   },
   {
     timestamps: true,

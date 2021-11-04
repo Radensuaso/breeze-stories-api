@@ -8,8 +8,6 @@ export interface Author {
   birthDate: Date;
   gender: string;
   bio: string;
-  refreshToken: string;
-  googleId: string;
 }
 
 export interface AuthorDocument extends Document, Author {}
