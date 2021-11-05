@@ -145,7 +145,7 @@ storiesRouter.get("/random", async (req, res, next) => {
 storiesRouter.get("/:storyId", async (req, res, next) => {
   try {
     const { storyId } = req.params;
-    const story = await StoryModel.findById(storyId);
+    const story = await StoryModel.findById(storyId).populate("author");
     if (story) {
       res.send(story);
     } else {
