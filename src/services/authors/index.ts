@@ -111,17 +111,11 @@ authorsRouter.get("/me", tokenMiddleware, async (req, res, next) => {
 //=================== Update my profile
 authorsRouter.put("/me", tokenMiddleware, async (req, res, next) => {
   try {
-    const { email } = req.body;
-    const author = await AuthorModel.findOne({ email });
-    if (!author) {
-      const authorId = req.author._id;
-      const me = await AuthorModel.findByIdAndUpdate(authorId, req.body, {
-        new: true,
-      });
-      res.send({ message: "You updated your profile.", me });
-    } else {
-      next(createHttpError(409, "Email already in use."));
-    }
+    const authorId = req.author._id;
+    const me = await AuthorModel.findByIdAndUpdate(authorId, req.body, {
+      new: true,
+    });
+    res.send({ message: "You updated your profile.", me });
   } catch (error) {
     next(error);
   }

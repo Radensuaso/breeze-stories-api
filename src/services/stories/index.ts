@@ -131,6 +131,7 @@ storiesRouter.get("/random", async (req, res, next) => {
 
       StoryModel.findOne()
         .skip(random)
+        .populate("author")
         .exec(function (err, result) {
           res.send(result);
         });
