@@ -6,6 +6,7 @@ import { tokenMiddleware } from "../../auth/tokenMiddleware";
 import createHttpError from "http-errors";
 import { generateJWTToken } from "../../auth/tokenTools";
 import StoryModel from "../stories/model";
+import CommentModel from "../comments/model";
 
 const authorsRouter = express.Router();
 
@@ -129,6 +130,8 @@ authorsRouter.delete("/me", tokenMiddleware, async (req, res, next) => {
     if (author) {
       await AuthorModel.deleteOne({ _id: author._id });
       await StoryModel.deleteMany({ author: author._id });
+      await CommentModel.deleteMany({ author: author._id });
+
       res.send({ message: "You deleted your profile.", author });
     } else {
       next(createHttpError(404, "Author does not exist."));
