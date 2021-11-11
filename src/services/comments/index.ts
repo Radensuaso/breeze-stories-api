@@ -14,8 +14,8 @@ commentsRouter.get("/story/:storyId", async (req, res, next) => {
     const story = await StoryModel.findById(storyId);
     if (story) {
       const comments = await CommentModel.find({ story: story._id })
-        .populate("author")
-        .populate({ path: "subComments.author" });
+        .sort({ createdAt: -1 })
+        .populate("author");
       res.send(comments);
     } else {
       next(
