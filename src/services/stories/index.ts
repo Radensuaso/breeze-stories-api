@@ -16,7 +16,7 @@ storiesRouter.get("/", async (req, res, next) => {
     const category = req.query.category as string[];
     const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 0;
-    const regex = new RegExp(["^", title].join(""), "i");
+    const regex = new RegExp([title].join(""), "i");
     if (title && category) {
       const searchedTitleCategoriesStories = await StoryModel.find({
         $and: [{ title: regex }, { categories: category }],
