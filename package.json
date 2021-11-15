@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev ./src",
     "_dev": "nodemon -r dotenv/config ./src",
-    "start": "node ./src"
+    "start": "node ./build",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "André Sousa",
