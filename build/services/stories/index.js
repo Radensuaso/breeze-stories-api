@@ -70,7 +70,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                 category = req.query.category;
                 skip = req.query.skip ? parseInt(req.query.skip) : 0;
                 limit = req.query.limit ? parseInt(req.query.limit) : 0;
-                regex = new RegExp(["^", title].join(""), "i");
+                regex = new RegExp([title].join(""), "i");
                 if (!(title && category)) return [3 /*break*/, 2];
                 return [4 /*yield*/, model_1.default.find({
                         $and: [{ title: regex }, { categories: category }],
