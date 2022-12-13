@@ -3,10 +3,10 @@ workflows:
     name: Deploy API
     environment:
       groups:
-        - Cloudinary
-        - Token
-        - MongoDB
-        - URLs
+        - cloudinary
+        - token
+        - mongo-db
+        - urls
     scripts:
         - npm i
         - npm run build
