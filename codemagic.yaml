@@ -1,0 +1,7 @@
+workflows:
+  hello-world:
+    name: Breeze Stories API
+    scripts:
+        - npm i
+        - npm run build
+        - npm run start
