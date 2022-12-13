@@ -1,6 +1,12 @@
 workflows:
-  hello-world:
-    name: Breeze Stories API
+  breeze-stories-api:
+    name: Deploy API
+    environment:
+      groups:
+        - Cloudinary
+        - Token
+        - MongoDB
+        - URLs
     scripts:
         - npm i
         - npm run build
