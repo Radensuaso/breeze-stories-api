@@ -14,8 +14,6 @@ if (!process.env.MONGO_CONNECTION) {
   throw new Error("No Mongo connection defined.");
 }
 
-console.log(process.env.MONGO_CONNECTION, process.env.PORT);
-
 mongoose.set("debug", true);
 mongoose.connect(process.env.MONGO_CONNECTION);
 
