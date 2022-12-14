@@ -9,11 +9,13 @@ if (!process.env.PORT) {
   throw new Error("No Port defined");
 }
 */
-const PORT = $PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 if (!process.env.MONGO_CONNECTION) {
   throw new Error("No Mongo connection defined.");
 }
+
+console.log(process.env.MONGO_CONNECTION, process.env.PORT);
 
 mongoose.set("debug", true);
 mongoose.connect(process.env.MONGO_CONNECTION);
