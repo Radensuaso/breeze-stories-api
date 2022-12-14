@@ -4,10 +4,12 @@ import listEndpoints from "express-list-endpoints";
 
 process.env.TS_NODE_DEV && require("dotenv").config();
 
+/*
 if (!process.env.PORT) {
   throw new Error("No Port defined");
 }
-const PORT = process.env.PORT || 3001;
+*/
+const PORT = process.env.$PORT || 3001;
 
 if (!process.env.MONGO_CONNECTION) {
   throw new Error("No Mongo connection defined.");
