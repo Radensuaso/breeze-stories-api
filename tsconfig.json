@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2016",
     "module": "commonjs",
     "rootDir": "./src",
     "baseUrl": "./",
     "typeRoots": ["@types", "./node_modules/@types", "./types"],
-    "outDir": "./build",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
