@@ -1,9 +1,9 @@
-import JWT from "jsonwebtoken";
-import { DecodedToken, AuthorDocument } from "../../typings/Author";
+import JWT from 'jsonwebtoken';
+import { DecodedToken, AuthorDocument } from '../types/Author';
 
-process.env.TS_NODE_DEV && require("dotenv").config();
+process.env.TS_NODE_DEV && require('dotenv').config();
 if (!process.env.JWT_SECRET) {
-  throw new Error("No JWT Secret");
+  throw new Error('No JWT Secret');
 }
 const JWTSecret = process.env.JWT_SECRET;
 
@@ -13,7 +13,7 @@ const generateJWT = (author: AuthorDocument) =>
     JWT.sign(
       { _id: author._id },
       JWTSecret,
-      { expiresIn: "7 days" },
+      { expiresIn: '7 days' },
       (err, token) => {
         if (err) {
           reject(err);

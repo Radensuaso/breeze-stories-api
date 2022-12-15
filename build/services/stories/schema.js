@@ -6,24 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var Schema = mongoose_1.default.Schema;
 var StorySchema = new Schema({
-    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+    author: { type: Schema.Types.ObjectId, required: true, ref: 'author' },
     title: { type: String, required: true },
     categories: {
         type: [String],
         validate: function (v) { return Array.isArray(v) && v.length > 0; },
         enum: [
-            "Mystery",
-            "Thriller",
-            "Horror",
-            "Historical",
-            "Romance",
-            "Sci-fi",
-            "Fantasy",
-            "Dystopian",
+            'Mystery',
+            'Thriller',
+            'Horror',
+            'Historical',
+            'Romance',
+            'Sci-fi',
+            'Fantasy',
+            'Dystopian',
         ],
     },
     story: { type: String, required: true },
-    hearts: { type: [Schema.Types.ObjectId], ref: "author", required: true },
+    hearts: { type: [Schema.Types.ObjectId], ref: 'author', required: true },
     storyImage: { type: String },
 }, {
     timestamps: true,

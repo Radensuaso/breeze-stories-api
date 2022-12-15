@@ -1,22 +1,22 @@
-import express from "express";
-import StoryModel from "./model";
-import AuthorModel from "../authors/model";
-import CommentModel from "../comments/model";
-import { saveStoryImageCloudinary } from "../../lib/cloudinaryTools";
-import multer from "multer";
-import { tokenMiddleware } from "../../auth/tokenMiddleware";
-import createHttpError from "http-errors";
+import express from 'express';
+import createHttpError from 'http-errors';
+import StoryModel from './model';
+import AuthorModel from '../authors/model';
+import CommentModel from '../comments/model';
+import { saveStoryImageCloudinary } from '../../lib/cloudinaryTools';
+import multer from 'multer';
+import { tokenMiddleware } from '../../auth/tokenMiddleware';
 
 const storiesRouter = express.Router();
 
 //================== Get all stories, with queries
-storiesRouter.get("/", async (req, res, next) => {
+storiesRouter.get('/', async (req, res, next) => {
   try {
     const title = req.query.title;
     const category = req.query.category as string[];
     const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 0;
-    const regex = new RegExp([title].join(""), "i");
+    const regex = new RegExp([title].join(''), 'i');
     if (title && category) {
       const searchedTitleCategoriesStories = await StoryModel.find({
         $and: [{ title: regex }, { categories: category }],
@@ -24,7 +24,7 @@ storiesRouter.get("/", async (req, res, next) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate("author");
+        .populate('author');
       res.send(searchedTitleCategoriesStories);
     } else if (title) {
       const searchedTitleStories = await StoryModel.find({
@@ -33,7 +33,7 @@ storiesRouter.get("/", async (req, res, next) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate("author");
+        .populate('author');
       res.send(searchedTitleStories);
     } else if (category) {
       const searchedCategoriesStories = await StoryModel.find({
@@ -42,14 +42,14 @@ storiesRouter.get("/", async (req, res, next) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate("author");
+        .populate('author');
       res.send(searchedCategoriesStories);
     } else {
       const stories = await StoryModel.find()
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate("author");
+        .populate('author');
       res.send(stories);
     }
   } catch (error) {
@@ -58,28 +58,28 @@ storiesRouter.get("/", async (req, res, next) => {
 });
 
 //================ Post a new Story.
-storiesRouter.post("/", tokenMiddleware, async (req, res, next) => {
+storiesRouter.post('/', tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
     const newStory = new StoryModel({ ...req.body, author: authorId });
     await newStory.save();
     res
       .status(201)
-      .send({ message: "You posted a new story.", story: newStory });
+      .send({ message: 'You posted a new story.', story: newStory });
   } catch (error) {
     next(error);
   }
 });
 
 //==================Get all my stories.
-storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
+storiesRouter.get('/me', tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
     const stories = await StoryModel.find({ author: authorId })
       .sort({
         createdAt: -1,
       })
-      .populate("author");
+      .populate('author');
     res.send(stories);
   } catch (error) {
     next(error);
@@ -87,14 +87,14 @@ storiesRouter.get("/me", tokenMiddleware, async (req, res, next) => {
 });
 
 //==================== Get all stories I hearted.
-storiesRouter.get("/hearts", tokenMiddleware, async (req, res, next) => {
+storiesRouter.get('/hearts', tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
     const stories = await StoryModel.find({ hearts: authorId })
       .sort({
         createdAt: -1,
       })
-      .populate("author");
+      .populate('author');
     res.send(stories);
   } catch (error) {
     next(error);
@@ -102,7 +102,7 @@ storiesRouter.get("/hearts", tokenMiddleware, async (req, res, next) => {
 });
 
 //===================Get all Stories from an Author.
-storiesRouter.get("/author/:authorId", async (req, res, next) => {
+storiesRouter.get('/author/:authorId', async (req, res, next) => {
   try {
     const { authorId } = req.params;
     const author = await AuthorModel.findById(authorId);
@@ -112,7 +112,7 @@ storiesRouter.get("/author/:authorId", async (req, res, next) => {
         .sort({
           createdAt: -1,
         })
-        .populate("author");
+        .populate('author');
       res.send(stories);
     } else {
       next(
@@ -125,15 +125,15 @@ storiesRouter.get("/author/:authorId", async (req, res, next) => {
 });
 
 //=======================Get one Story at random.
-storiesRouter.get("/random", async (req, res, next) => {
+storiesRouter.get('/random', async (req, res, next) => {
   try {
-    StoryModel.count().exec(function (err, count) {
+    StoryModel.count().exec(function (err: any, count: any) {
       const random = Math.floor(Math.random() * count);
 
       StoryModel.findOne()
         .skip(random)
-        .populate("author")
-        .exec(function (err, result) {
+        .populate('author')
+        .exec(function (err: any, result: any) {
           res.send(result);
         });
     });
@@ -143,10 +143,10 @@ storiesRouter.get("/random", async (req, res, next) => {
 });
 
 //====================Get one Story
-storiesRouter.get("/:storyId", async (req, res, next) => {
+storiesRouter.get('/:storyId', async (req, res, next) => {
   try {
     const { storyId } = req.params;
-    const story = await StoryModel.findById(storyId).populate("author");
+    const story = await StoryModel.findById(storyId).populate('author');
     if (story) {
       res.send(story);
     } else {
@@ -161,9 +161,9 @@ storiesRouter.get("/:storyId", async (req, res, next) => {
 
 //====================Post an image to the Story.
 storiesRouter.post(
-  "/:storyId/storyImage",
+  '/:storyId/storyImage',
   tokenMiddleware,
-  multer({ storage: saveStoryImageCloudinary }).single("storyImage"),
+  multer({ storage: saveStoryImageCloudinary }).single('storyImage'),
   async (req, res, next) => {
     try {
       const authorId = req.author._id;
@@ -179,7 +179,7 @@ storiesRouter.post(
       );
       if (updatedStory) {
         res.send({
-          message: "You successfully posted an image to your story.",
+          message: 'You successfully posted an image to your story.',
           story: updatedStory,
         });
       } else {
@@ -194,7 +194,7 @@ storiesRouter.post(
 );
 
 //=======================Update my Story.
-storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
+storiesRouter.put('/:storyId/me', tokenMiddleware, async (req, res, next) => {
   try {
     const authorId = req.author._id;
     const { storyId } = req.params;
@@ -205,7 +205,7 @@ storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
       { new: true }
     );
     if (updatedStory) {
-      res.send({ message: "Your story was updated", story: updatedStory });
+      res.send({ message: 'Your story was updated', story: updatedStory });
     } else {
       next(
         createHttpError(404, `The story with id: ${storyId} was not found.`)
@@ -218,7 +218,7 @@ storiesRouter.put("/:storyId/me", tokenMiddleware, async (req, res, next) => {
 
 //=======================Delete my story
 storiesRouter.delete(
-  "/:storyId/me",
+  '/:storyId/me',
   tokenMiddleware,
   async (req, res, next) => {
     try {
@@ -233,7 +233,7 @@ storiesRouter.delete(
         await StoryModel.deleteOne({ _id: story._id });
         await CommentModel.deleteMany({ author: story._id });
         res.send({
-          message: "Your story was deleted",
+          message: 'Your story was deleted',
           story,
         });
       } else {
@@ -249,7 +249,7 @@ storiesRouter.delete(
 
 //=========================Post or remove a heart
 storiesRouter.post(
-  "/:storyId/hearts",
+  '/:storyId/hearts',
   tokenMiddleware,
   async (req, res, next) => {
     try {
@@ -267,7 +267,7 @@ storiesRouter.post(
           },
           { new: true }
         );
-        res.send({ message: "You unhearted the Story", story: unheartedStory });
+        res.send({ message: 'You unhearted the Story', story: unheartedStory });
       } else {
         const heartedStory = await StoryModel.findByIdAndUpdate(
           storyId,
@@ -276,7 +276,7 @@ storiesRouter.post(
           },
           { new: true }
         );
-        res.send({ message: "You hearted the Story", story: heartedStory });
+        res.send({ message: 'You hearted the Story', story: heartedStory });
       }
     } catch (error) {
       next(error);

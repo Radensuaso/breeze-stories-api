@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import { AuthorDocument } from "../../../typings/Author";
-import randomizeAvatar from "../../lib/randomizeAvatar";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import { AuthorDocument } from '../../types/Author';
+import randomizeAvatar from '../../lib/randomizeAvatar';
 
 const { Schema } = mongoose;
 
@@ -21,8 +21,8 @@ const AuthorSchema = new Schema<AuthorDocument>(
 );
 
 // creating new
-AuthorSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+AuthorSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   const hash = await bcrypt.hash(this.password, 12);
   this.password = hash;

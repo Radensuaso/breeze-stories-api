@@ -51,16 +51,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var http_errors_1 = __importDefault(require("http-errors"));
 var model_1 = __importDefault(require("./model"));
 var model_2 = __importDefault(require("../authors/model"));
 var model_3 = __importDefault(require("../comments/model"));
 var cloudinaryTools_1 = require("../../lib/cloudinaryTools");
 var multer_1 = __importDefault(require("multer"));
 var tokenMiddleware_1 = require("../../auth/tokenMiddleware");
-var http_errors_1 = __importDefault(require("http-errors"));
 var storiesRouter = express_1.default.Router();
 //================== Get all stories, with queries
-storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var title, category, skip, limit, regex, searchedTitleCategoriesStories, searchedTitleStories, searchedCategoriesStories, stories, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -70,7 +70,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                 category = req.query.category;
                 skip = req.query.skip ? parseInt(req.query.skip) : 0;
                 limit = req.query.limit ? parseInt(req.query.limit) : 0;
-                regex = new RegExp([title].join(""), "i");
+                regex = new RegExp([title].join(''), 'i');
                 if (!(title && category)) return [3 /*break*/, 2];
                 return [4 /*yield*/, model_1.default.find({
                         $and: [{ title: regex }, { categories: category }],
@@ -78,7 +78,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                         .sort({ createdAt: -1 })
                         .skip(skip)
                         .limit(limit)
-                        .populate("author")];
+                        .populate('author')];
             case 1:
                 searchedTitleCategoriesStories = _a.sent();
                 res.send(searchedTitleCategoriesStories);
@@ -91,7 +91,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                         .sort({ createdAt: -1 })
                         .skip(skip)
                         .limit(limit)
-                        .populate("author")];
+                        .populate('author')];
             case 3:
                 searchedTitleStories = _a.sent();
                 res.send(searchedTitleStories);
@@ -104,7 +104,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                         .sort({ createdAt: -1 })
                         .skip(skip)
                         .limit(limit)
-                        .populate("author")];
+                        .populate('author')];
             case 5:
                 searchedCategoriesStories = _a.sent();
                 res.send(searchedCategoriesStories);
@@ -113,7 +113,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
                     .sort({ createdAt: -1 })
                     .skip(skip)
                     .limit(limit)
-                    .populate("author")];
+                    .populate('author')];
             case 7:
                 stories = _a.sent();
                 res.send(stories);
@@ -128,7 +128,7 @@ storiesRouter.get("/", function (req, res, next) { return __awaiter(void 0, void
     });
 }); });
 //================ Post a new Story.
-storiesRouter.post("/", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.post('/', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, newStory, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -141,7 +141,7 @@ storiesRouter.post("/", tokenMiddleware_1.tokenMiddleware, function (req, res, n
                 _a.sent();
                 res
                     .status(201)
-                    .send({ message: "You posted a new story.", story: newStory });
+                    .send({ message: 'You posted a new story.', story: newStory });
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
@@ -152,7 +152,7 @@ storiesRouter.post("/", tokenMiddleware_1.tokenMiddleware, function (req, res, n
     });
 }); });
 //==================Get all my stories.
-storiesRouter.get("/me", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/me', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, stories, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -163,7 +163,7 @@ storiesRouter.get("/me", tokenMiddleware_1.tokenMiddleware, function (req, res, 
                         .sort({
                         createdAt: -1,
                     })
-                        .populate("author")];
+                        .populate('author')];
             case 1:
                 stories = _a.sent();
                 res.send(stories);
@@ -177,7 +177,7 @@ storiesRouter.get("/me", tokenMiddleware_1.tokenMiddleware, function (req, res, 
     });
 }); });
 //==================== Get all stories I hearted.
-storiesRouter.get("/hearts", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/hearts', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, stories, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -188,7 +188,7 @@ storiesRouter.get("/hearts", tokenMiddleware_1.tokenMiddleware, function (req, r
                         .sort({
                         createdAt: -1,
                     })
-                        .populate("author")];
+                        .populate('author')];
             case 1:
                 stories = _a.sent();
                 res.send(stories);
@@ -202,7 +202,7 @@ storiesRouter.get("/hearts", tokenMiddleware_1.tokenMiddleware, function (req, r
     });
 }); });
 //===================Get all Stories from an Author.
-storiesRouter.get("/author/:authorId", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/author/:authorId', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, author, stories, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -217,7 +217,7 @@ storiesRouter.get("/author/:authorId", function (req, res, next) { return __awai
                         .sort({
                         createdAt: -1,
                     })
-                        .populate("author")];
+                        .populate('author')];
             case 2:
                 stories = _a.sent();
                 res.send(stories);
@@ -235,14 +235,14 @@ storiesRouter.get("/author/:authorId", function (req, res, next) { return __awai
     });
 }); });
 //=======================Get one Story at random.
-storiesRouter.get("/random", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/random', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         try {
             model_1.default.count().exec(function (err, count) {
                 var random = Math.floor(Math.random() * count);
                 model_1.default.findOne()
                     .skip(random)
-                    .populate("author")
+                    .populate('author')
                     .exec(function (err, result) {
                     res.send(result);
                 });
@@ -255,14 +255,14 @@ storiesRouter.get("/random", function (req, res, next) { return __awaiter(void 0
     });
 }); });
 //====================Get one Story
-storiesRouter.get("/:storyId", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.get('/:storyId', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var storyId, story, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 storyId = req.params.storyId;
-                return [4 /*yield*/, model_1.default.findById(storyId).populate("author")];
+                return [4 /*yield*/, model_1.default.findById(storyId).populate('author')];
             case 1:
                 story = _a.sent();
                 if (story) {
@@ -281,7 +281,7 @@ storiesRouter.get("/:storyId", function (req, res, next) { return __awaiter(void
     });
 }); });
 //====================Post an image to the Story.
-storiesRouter.post("/:storyId/storyImage", tokenMiddleware_1.tokenMiddleware, (0, multer_1.default)({ storage: cloudinaryTools_1.saveStoryImageCloudinary }).single("storyImage"), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.post('/:storyId/storyImage', tokenMiddleware_1.tokenMiddleware, (0, multer_1.default)({ storage: cloudinaryTools_1.saveStoryImageCloudinary }).single('storyImage'), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, storyId, storyImage, updatedStory, error_7;
     var _a;
     return __generator(this, function (_b) {
@@ -298,7 +298,7 @@ storiesRouter.post("/:storyId/storyImage", tokenMiddleware_1.tokenMiddleware, (0
                 updatedStory = _b.sent();
                 if (updatedStory) {
                     res.send({
-                        message: "You successfully posted an image to your story.",
+                        message: 'You successfully posted an image to your story.',
                         story: updatedStory,
                     });
                 }
@@ -315,7 +315,7 @@ storiesRouter.post("/:storyId/storyImage", tokenMiddleware_1.tokenMiddleware, (0
     });
 }); });
 //=======================Update my Story.
-storiesRouter.put("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.put('/:storyId/me', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, storyId, updatedStory, error_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -327,7 +327,7 @@ storiesRouter.put("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function (r
             case 1:
                 updatedStory = _a.sent();
                 if (updatedStory) {
-                    res.send({ message: "Your story was updated", story: updatedStory });
+                    res.send({ message: 'Your story was updated', story: updatedStory });
                 }
                 else {
                     next((0, http_errors_1.default)(404, "The story with id: " + storyId + " was not found."));
@@ -342,7 +342,7 @@ storiesRouter.put("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function (r
     });
 }); });
 //=======================Delete my story
-storiesRouter.delete("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.delete('/:storyId/me', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, storyId, story, error_9;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -364,7 +364,7 @@ storiesRouter.delete("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function
             case 3:
                 _a.sent();
                 res.send({
-                    message: "Your story was deleted",
+                    message: 'Your story was deleted',
                     story: story,
                 });
                 return [3 /*break*/, 5];
@@ -381,7 +381,7 @@ storiesRouter.delete("/:storyId/me", tokenMiddleware_1.tokenMiddleware, function
     });
 }); });
 //=========================Post or remove a heart
-storiesRouter.post("/:storyId/hearts", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+storiesRouter.post('/:storyId/hearts', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, storyId, authorHearted, unheartedStory, heartedStory, error_10;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -401,14 +401,14 @@ storiesRouter.post("/:storyId/hearts", tokenMiddleware_1.tokenMiddleware, functi
                     }, { new: true })];
             case 2:
                 unheartedStory = _a.sent();
-                res.send({ message: "You unhearted the Story", story: unheartedStory });
+                res.send({ message: 'You unhearted the Story', story: unheartedStory });
                 return [3 /*break*/, 5];
             case 3: return [4 /*yield*/, model_1.default.findByIdAndUpdate(storyId, {
                     $push: { hearts: authorId },
                 }, { new: true })];
             case 4:
                 heartedStory = _a.sent();
-                res.send({ message: "You hearted the Story", story: heartedStory });
+                res.send({ message: 'You hearted the Story', story: heartedStory });
                 _a.label = 5;
             case 5: return [3 /*break*/, 7];
             case 6:

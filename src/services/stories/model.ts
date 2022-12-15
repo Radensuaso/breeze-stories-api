@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import StorySchema from "./schema";
-import { StoryDocument, StoryModelType } from "../../../typings/Story";
+import { StoryDocument, StoryModelType } from "../../types/Story";
 
 const { model } = mongoose;
 

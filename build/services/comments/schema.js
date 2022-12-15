@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var Schema = mongoose_1.default.Schema;
 var CommentSchema = new Schema({
-    story: { type: Schema.Types.ObjectId, required: true, ref: "story" },
-    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+    story: { type: Schema.Types.ObjectId, required: true, ref: 'story' },
+    author: { type: Schema.Types.ObjectId, required: true, ref: 'author' },
     comment: { type: String, required: true },
 }, {
     timestamps: true,

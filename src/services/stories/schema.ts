@@ -1,28 +1,28 @@
-import mongoose from "mongoose";
-import { StoryDocument } from "../../../typings/Story";
+import mongoose from 'mongoose';
+import { StoryDocument } from '../../types/Story';
 
 const { Schema } = mongoose;
 
 const StorySchema = new Schema<StoryDocument>(
   {
-    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+    author: { type: Schema.Types.ObjectId, required: true, ref: 'author' },
     title: { type: String, required: true },
     categories: {
       type: [String],
       validate: (v: void) => Array.isArray(v) && v.length > 0,
       enum: [
-        "Mystery",
-        "Thriller",
-        "Horror",
-        "Historical",
-        "Romance",
-        "Sci-fi",
-        "Fantasy",
-        "Dystopian",
+        'Mystery',
+        'Thriller',
+        'Horror',
+        'Historical',
+        'Romance',
+        'Sci-fi',
+        'Fantasy',
+        'Dystopian',
       ],
     },
     story: { type: String, required: true },
-    hearts: { type: [Schema.Types.ObjectId], ref: "author", required: true },
+    hearts: { type: [Schema.Types.ObjectId], ref: 'author', required: true },
     storyImage: { type: String },
   },
   {

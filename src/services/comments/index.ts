@@ -1,21 +1,20 @@
-import express from "express";
-import CommentModel from "./model";
-import StoryModel from "../stories/model";
-import { tokenMiddleware } from "../../auth/tokenMiddleware";
-import createHttpError from "http-errors";
-import { CommentDocument } from "typings/Comment";
+import express from 'express';
+import CommentModel from './model';
+import StoryModel from '../stories/model';
+import { tokenMiddleware } from '../../auth/tokenMiddleware';
+import createHttpError from 'http-errors';
 
 const commentsRouter = express.Router();
 
 //=======================Get all comments from a particular Story.
-commentsRouter.get("/story/:storyId", async (req, res, next) => {
+commentsRouter.get('/story/:storyId', async (req, res, next) => {
   try {
     const { storyId } = req.params;
     const story = await StoryModel.findById(storyId);
     if (story) {
       const comments = await CommentModel.find({ story: story._id })
         .sort({ createdAt: -1 })
-        .populate("author");
+        .populate('author');
       res.send(comments);
     } else {
       next(
@@ -29,7 +28,7 @@ commentsRouter.get("/story/:storyId", async (req, res, next) => {
 
 //=========================Post a new comment to a Story.
 commentsRouter.post(
-  "/story/:storyId",
+  '/story/:storyId',
   tokenMiddleware,
   async (req, res, next) => {
     try {
@@ -45,7 +44,7 @@ commentsRouter.post(
         await newComment.save();
         res
           .status(201)
-          .send({ message: "Your comment was created.", comment: newComment });
+          .send({ message: 'Your comment was created.', comment: newComment });
       } else {
         next(
           createHttpError(
@@ -61,12 +60,12 @@ commentsRouter.post(
 );
 
 //=====================Get a single comment.
-commentsRouter.get("/:commentId", async (req, res, next) => {
+commentsRouter.get('/:commentId', async (req, res, next) => {
   try {
     const { commentId } = req.params;
     const comment = await CommentModel.findById(commentId)
-      .populate("author")
-      .populate({ path: "subComments.author" });
+      .populate('author')
+      .populate({ path: 'subComments.author' });
     if (comment) {
       res.send(comment);
     } else {
@@ -84,7 +83,7 @@ commentsRouter.get("/:commentId", async (req, res, next) => {
 
 //====================Update my comment.
 commentsRouter.put(
-  "/:commentId/me",
+  '/:commentId/me',
   tokenMiddleware,
   async (req, res, next) => {
     try {
@@ -100,7 +99,7 @@ commentsRouter.put(
       );
       if (updatedComment) {
         res.send({
-          message: "Your comment was updated.",
+          message: 'Your comment was updated.',
           comment: updatedComment,
         });
       } else {
@@ -119,7 +118,7 @@ commentsRouter.put(
 
 //==================Delete my comment.
 commentsRouter.delete(
-  "/:commentId/me",
+  '/:commentId/me',
   tokenMiddleware,
   async (req, res, next) => {
     try {
@@ -131,7 +130,7 @@ commentsRouter.delete(
       });
       if (deletedComment) {
         res.send({
-          message: "Your comment was deleted.",
+          message: 'Your comment was deleted.',
           comment: deletedComment,
         });
       } else {

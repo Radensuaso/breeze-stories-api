@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
-import { CommentDocument } from "../../../typings/Comment";
+import mongoose from 'mongoose';
+import { CommentDocument } from '../../types/Comment';
 
 const { Schema } = mongoose;
 const CommentSchema = new Schema<CommentDocument>(
   {
-    story: { type: Schema.Types.ObjectId, required: true, ref: "story" },
-    author: { type: Schema.Types.ObjectId, required: true, ref: "author" },
+    story: { type: Schema.Types.ObjectId, required: true, ref: 'story' },
+    author: { type: Schema.Types.ObjectId, required: true, ref: 'author' },
     comment: { type: String, required: true },
   },
   {

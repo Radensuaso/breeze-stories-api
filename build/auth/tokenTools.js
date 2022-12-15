@@ -41,15 +41,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyJWTToken = exports.generateJWTToken = void 0;
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-process.env.TS_NODE_DEV && require("dotenv").config();
+process.env.TS_NODE_DEV && require('dotenv').config();
 if (!process.env.JWT_SECRET) {
-    throw new Error("No JWT Secret");
+    throw new Error('No JWT Secret');
 }
 var JWTSecret = process.env.JWT_SECRET;
 //============== Generate JWT Token
 var generateJWT = function (author) {
     return new Promise(function (resolve, reject) {
-        return jsonwebtoken_1.default.sign({ _id: author._id }, JWTSecret, { expiresIn: "7 days" }, function (err, token) {
+        return jsonwebtoken_1.default.sign({ _id: author._id }, JWTSecret, { expiresIn: '7 days' }, function (err, token) {
             if (err) {
                 reject(err);
             }

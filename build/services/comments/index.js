@@ -57,7 +57,7 @@ var tokenMiddleware_1 = require("../../auth/tokenMiddleware");
 var http_errors_1 = __importDefault(require("http-errors"));
 var commentsRouter = express_1.default.Router();
 //=======================Get all comments from a particular Story.
-commentsRouter.get("/story/:storyId", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+commentsRouter.get('/story/:storyId', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var storyId, story, comments, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -70,7 +70,7 @@ commentsRouter.get("/story/:storyId", function (req, res, next) { return __await
                 if (!story) return [3 /*break*/, 3];
                 return [4 /*yield*/, model_1.default.find({ story: story._id })
                         .sort({ createdAt: -1 })
-                        .populate("author")];
+                        .populate('author')];
             case 2:
                 comments = _a.sent();
                 res.send(comments);
@@ -88,7 +88,7 @@ commentsRouter.get("/story/:storyId", function (req, res, next) { return __await
     });
 }); });
 //=========================Post a new comment to a Story.
-commentsRouter.post("/story/:storyId", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+commentsRouter.post('/story/:storyId', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, storyId, story, newComment, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -106,7 +106,7 @@ commentsRouter.post("/story/:storyId", tokenMiddleware_1.tokenMiddleware, functi
                 _a.sent();
                 res
                     .status(201)
-                    .send({ message: "Your comment was created.", comment: newComment });
+                    .send({ message: 'Your comment was created.', comment: newComment });
                 return [3 /*break*/, 4];
             case 3:
                 next((0, http_errors_1.default)(404, "The Story with the id: " + storyId + " was not found."));
@@ -121,7 +121,7 @@ commentsRouter.post("/story/:storyId", tokenMiddleware_1.tokenMiddleware, functi
     });
 }); });
 //=====================Get a single comment.
-commentsRouter.get("/:commentId", function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+commentsRouter.get('/:commentId', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var commentId, comment, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -129,8 +129,8 @@ commentsRouter.get("/:commentId", function (req, res, next) { return __awaiter(v
                 _a.trys.push([0, 2, , 3]);
                 commentId = req.params.commentId;
                 return [4 /*yield*/, model_1.default.findById(commentId)
-                        .populate("author")
-                        .populate({ path: "subComments.author" })];
+                        .populate('author')
+                        .populate({ path: 'subComments.author' })];
             case 1:
                 comment = _a.sent();
                 if (comment) {
@@ -149,7 +149,7 @@ commentsRouter.get("/:commentId", function (req, res, next) { return __awaiter(v
     });
 }); });
 //====================Update my comment.
-commentsRouter.put("/:commentId/me", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+commentsRouter.put('/:commentId/me', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, commentId, updatedComment, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -165,7 +165,7 @@ commentsRouter.put("/:commentId/me", tokenMiddleware_1.tokenMiddleware, function
                 updatedComment = _a.sent();
                 if (updatedComment) {
                     res.send({
-                        message: "Your comment was updated.",
+                        message: 'Your comment was updated.',
                         comment: updatedComment,
                     });
                 }
@@ -182,7 +182,7 @@ commentsRouter.put("/:commentId/me", tokenMiddleware_1.tokenMiddleware, function
     });
 }); });
 //==================Delete my comment.
-commentsRouter.delete("/:commentId/me", tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+commentsRouter.delete('/:commentId/me', tokenMiddleware_1.tokenMiddleware, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var authorId, commentId, deletedComment, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -198,7 +198,7 @@ commentsRouter.delete("/:commentId/me", tokenMiddleware_1.tokenMiddleware, funct
                 deletedComment = _a.sent();
                 if (deletedComment) {
                     res.send({
-                        message: "Your comment was deleted.",
+                        message: 'Your comment was deleted.',
                         comment: deletedComment,
                     });
                 }

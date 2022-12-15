@@ -55,13 +55,13 @@ var AuthorSchema = new Schema({
     timestamps: true,
 });
 // creating new
-AuthorSchema.pre("save", function (next) {
+AuthorSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function () {
         var hash;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!this.isModified("password"))
+                    if (!this.isModified('password'))
                         return [2 /*return*/, next()];
                     return [4 /*yield*/, bcrypt_1.default.hash(this.password, 12)];
                 case 1:
