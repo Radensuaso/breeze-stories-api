@@ -1,7 +1,7 @@
 import JWT from 'jsonwebtoken';
 import { DecodedToken, AuthorDocument } from '../types/Author';
+import 'dotenv/config';
 
-process.env.TS_NODE_DEV && require('dotenv').config();
 if (!process.env.JWT_SECRET) {
   throw new Error('No JWT Secret');
 }
