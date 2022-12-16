@@ -1,6 +1,0 @@
-node_modules/
-dist/
-docker-compose.dev.yml
-docker-compose.yml
-Dockerfile
-.env
