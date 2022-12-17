@@ -6,4 +6,4 @@ const { model } = mongoose;
 
 const StoryModel = model<StoryDocument, StoryModelType>("story", StorySchema);
 
-export default StoryModel;
+export default StoryModel; 

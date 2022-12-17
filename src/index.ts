@@ -3,12 +3,12 @@ import listEndpoints from 'express-list-endpoints';
 import express from 'express'; // import express from express
 import cors from 'cors'; // will enable the frontend to communicate with the backend
 import {
-  badRequestHandler,
-  unauthorizedHandler,
-  forbiddenHandler,
-  notFoundHandler,
-  conflictHandler,
-  genericServerErrorHandler,
+    badRequestHandler,
+    unauthorizedHandler,
+    forbiddenHandler,
+    notFoundHandler,
+    conflictHandler,
+    genericServerErrorHandler,
 } from './errorHandlers';
 import authorsRouter from './services/authors';
 import storiesRouter from './services/stories';
@@ -16,13 +16,13 @@ import commentsRouter from './services/comments';
 import 'dotenv/config';
 
 if (!process.env.PORT) {
-  throw new Error('No Port defined');
+    throw new Error('No Port defined');
 }
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 9000;
 
 if (!process.env.MONGO_CONNECTION) {
-  throw new Error('No Mongo connection defined.');
+    throw new Error('No Mongo connection defined.');
 }
 
 const app = express(); //our server function initialized with express()
@@ -49,13 +49,13 @@ mongoose.set('debug', true);
 mongoose.connect(process.env.MONGO_CONNECTION);
 
 mongoose.connection.on('connected', () => {
-  console.log('🍃Successfully connected to mongo!');
-  app.listen(PORT, () => {
-    console.table(listEndpoints(app));
-    console.log('🛩️ Server is running on port ', PORT);
-  });
+    console.log('🍃Successfully connected to mongo!');
+    app.listen(PORT, () => {
+        console.table(listEndpoints(app));
+        console.log('🛩️ Server is running on port ', PORT);
+    });
 });
 
 mongoose.connection.on('error', (err) => {
-  console.log('MONGO ERROR: ', err);
+    console.log('MONGO ERROR: ', err);
 });

@@ -5,11 +5,11 @@ import { StoryDocument } from "./Story";
 //================ Comment
 
 export interface Comment {
-  story: StoryDocument;
-  author: AuthorDocument;
-  comment: string;
+    story: StoryDocument;
+    author: AuthorDocument;
+    comment: string;
 }
 
-export interface CommentDocument extends Document, Comment {}
+export interface CommentDocument extends Document, Comment { }
 
-export interface CommentModelType extends Model<CommentDocument> {}
+export interface CommentModelType extends Model<CommentDocument> { } 

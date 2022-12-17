@@ -6,28 +6,28 @@ import randomizeAvatar from '../../lib/randomizeAvatar';
 const { Schema } = mongoose;
 
 const AuthorSchema = new Schema<AuthorDocument>(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    avatar: { type: String, required: true, default: randomizeAvatar() },
-    birthDate: { type: Date },
-    gender: { type: String },
-    bio: { type: String },
-  },
-  {
-    timestamps: true,
-  }
+    {
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        password: { type: String, required: true },
+        avatar: { type: String, required: true, default: randomizeAvatar() },
+        birthDate: { type: Date },
+        gender: { type: String },
+        bio: { type: String },
+    },
+    {
+        timestamps: true,
+    }
 );
 
 // creating new
 AuthorSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+    if (!this.isModified('password')) return next();
 
-  const hash = await bcrypt.hash(this.password, 12);
-  this.password = hash;
+    const hash = await bcrypt.hash(this.password, 12);
+    this.password = hash;
 
-  return next();
+    return next();
 });
 
 // // Updating existent
@@ -43,25 +43,25 @@ AuthorSchema.pre('save', async function (next) {
 
 //Showing json without passwords
 AuthorSchema.methods.toJSON = function () {
-  const authorObject: any = this.toObject();
-  delete authorObject.password;
-  delete authorObject.__v;
-  return authorObject;
+    const authorObject: any = this.toObject();
+    delete authorObject.password;
+    delete authorObject.__v;
+    return authorObject;
 };
 
 //Checking credentials
 AuthorSchema.statics.checkCredentials = async function (email, password) {
-  const author = await this.findOne({ email });
-  if (author) {
-    const isMatch = await bcrypt.compare(password, author.password);
-    if (isMatch) {
-      return author;
+    const author = await this.findOne({ email });
+    if (author) {
+        const isMatch = await bcrypt.compare(password, author.password);
+        if (isMatch) {
+            return author;
+        } else {
+            return null;
+        }
     } else {
-      return null;
+        return null;
     }
-  } else {
-    return null;
-  }
 };
 
 export default AuthorSchema;

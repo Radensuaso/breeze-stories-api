@@ -5,8 +5,8 @@ import { CommentDocument, CommentModelType } from '../../types/Comment';
 const { model } = mongoose;
 
 const CommentModel = model<CommentDocument, CommentModelType>(
-  'comment',
-  CommentSchema
+    'comment',
+    CommentSchema
 );
 
-export default CommentModel;
+export default CommentModel; 
