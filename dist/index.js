@@ -15,7 +15,7 @@ require("dotenv/config");
 if (!process.env.PORT) {
     throw new Error('No Port defined');
 }
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 9000;
 if (!process.env.MONGO_CONNECTION) {
     throw new Error('No Mongo connection defined.');
 }

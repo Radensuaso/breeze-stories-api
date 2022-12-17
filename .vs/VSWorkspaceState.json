@@ -1,8 +1,15 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\src",
+    "\\src\\auth",
+    "\\src\\lib",
+    "\\src\\services",
+    "\\src\\services\\authors",
+    "\\src\\services\\comments",
+    "\\src\\services\\stories",
+    "\\src\\types"
   ],
-  "SelectedNode": "\\src\\index.ts",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
